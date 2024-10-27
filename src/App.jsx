@@ -14,14 +14,15 @@ import UserProfile from './components/UserProfile';
 const App = () => {
   return (
     <AuthProvider>
-      <Router>
-        <div className="app-container">
-          <NavBar />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route 
-              path="/landing" 
+    <Router>
+      <div className="app-container">
+        {/* NavBar only shows on authenticated routes */}
+        <Routes>
+          {/* HomePage route without NavBar */}
+          <Route path="/" element={<HomePage />} />
+          {/* All other routes with NavBar */}
+          <Route
+            path="/landing"
               element={
                 <ProtectedRoute>
                   <Landing />

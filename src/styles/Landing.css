@@ -1,0 +1,83 @@
+/* src/styles/Landing.css */
+
+.landing-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Header Section */
+  .landing-header {
+    background-color: #FFE4C4;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .topic-of-day {
+    display: inline-block;
+    background: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin: 10px 0;
+    font-size: 1.2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .yap-button {
+    background-color: #f97316;
+    color: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .yap-button:hover {
+    background-color: #ea580c;
+  }
+  
+  /* Topics Feed Section */
+  .topic-feed {
+    margin-top: 20px;
+  }
+  
+  .topic-bubble {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .bubble-content {
+    background: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    flex-grow: 1;
+  }
+  
+  .hot-indicator {
+    margin-left: 10px;
+    color: #ef4444;
+  }
+  
+  /* Browse Past Topics Section */
+  .past-topics {
+    background-color: #f9fafb;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .past-topics-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  

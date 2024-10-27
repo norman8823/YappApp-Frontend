@@ -1,0 +1,54 @@
+.update-post-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .cancel-button {
+    background-color: #e5e7eb;
+    color: #374151;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .update-button {
+    background-color: #f97316;
+    color: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .delete-button {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .delete-button:disabled {
+    background-color: #f87171;
+    cursor: not-allowed;
+  }
+  
+  .error-message {
+    color: #ef4444;
+    text-align: center;
+    margin: 10px 0;
+  }
