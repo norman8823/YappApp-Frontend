@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { api } from '../services/api';
+import { signup } from '../services/authService';
 import '../styles/SignUp.css';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
     username: '',
+    email: '',
     password: '',
-    confirmPassword: '',
-    email: ''
+    confirmPassword: ''
   });
+  const [avatar, setAvatar] = useState(0); // For avatar selection
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login } = useAuth();
+
+  const handleAvatarChange = (direction) => {
+    if (direction === 'next') {
+      setAvatar((prev) => (prev + 1) % 5); // Assuming 5 avatars
+    } else {
+      setAvatar((prev) => (prev - 1 + 5) % 5);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,13 +32,16 @@ const SignUp = () => {
     }
 
     try {
-      const { user, token } = await api.auth.signUp({
+      const response = await signup({
         username: formData.username,
-        password: formData.password
+        email: formData.email,
+        password: formData.password,
+        avatar
       });
-      
-      login(user, token);
-      navigate('/landing');
+
+      if (response.token) {
+        navigate('/landing');
+      }
     } catch (err) {
       setError(err.message);
     }
@@ -40,7 +50,22 @@ const SignUp = () => {
   return (
     <div className="signup-container">
       <h1>Create Profile</h1>
+      
+      <div className="avatar-selector">
+        <img 
+          src="/api/placeholder/100/100"
+          alt="avatar"
+          className="avatar-preview"
+        />
+        <div className="avatar-controls">
+          <button onClick={() => handleAvatarChange('prev')}>&lt;</button>
+          <button onClick={() => handleAvatarChange('next')}>&gt;</button>
+        </div>
+        <p>0 followers</p>
+      </div>
+
       {error && <div className="error-message">{error}</div>}
+      
       <form onSubmit={handleSubmit} className="signup-form">
         <div className="form-group">
           <label>Username</label>
@@ -51,6 +76,7 @@ const SignUp = () => {
             required
           />
         </div>
+
         <div className="form-group">
           <label>Email</label>
           <input
@@ -60,6 +86,7 @@ const SignUp = () => {
             required
           />
         </div>
+
         <div className="form-group">
           <label>Create Password</label>
           <input
@@ -69,6 +96,7 @@ const SignUp = () => {
             required
           />
         </div>
+
         <div className="form-group">
           <label>Confirm Password</label>
           <input
@@ -78,8 +106,13 @@ const SignUp = () => {
             required
           />
         </div>
-        <button type="submit" className="create-profile-button">Create Profile</button>
+
+        <button type="submit" className="create-profile-button">
+          Create Profile
+        </button>
       </form>
     </div>
   );
 };
+
+export default SignUp;
