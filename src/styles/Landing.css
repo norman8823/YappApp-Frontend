@@ -15,8 +15,9 @@
   align-items: center;
 }
 
-.topic-header {
-  margin-bottom: 150px; /* Add space between title and button */
+.prompt-header {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .topic-of-day {
@@ -26,6 +27,14 @@
   padding: 10px 20px;
   border-radius: 20px;
   margin: 50px;
+}
+
+.current-topic {
+  background: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin: 10px 0;
+  display: inline-block;
 }
 
 .yap-button {
@@ -44,13 +53,13 @@
   background-color: #ea580c;
 }
 
-.topics-section {
+.prompts-section {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.topic-bubble-container {
+.prompt-bubble-container {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -58,7 +67,7 @@
   color: inherit;
 }
 
-.topic-bubble {
+.prompt-bubble {
   background: white;
   padding: 12px 24px;
   border-radius: 50px;
@@ -66,7 +75,7 @@
   transition: transform 0.2s;
 }
 
-.topic-bubble:hover {
+.prompt-bubble:hover {
   transform: translateX(5px);
 }
 
@@ -74,35 +83,10 @@
   flex-shrink: 0;
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .topic-of-day {
-    background: #1f2937;
-    color: white;
-  }
-
-  .topic-bubble {
-    background: #1f2937;
-    color: white;
-  }
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .landing-container {
-    padding: 10px;
-  }
-
-  .header-section {
-    padding: 30px 15px;
-  }
-
-  .topic-of-day {
-    font-size: 1.25rem;
-  }
-
-  .yap-button {
-    padding: 10px 30px;
-    font-size: 0.9rem;
-  }
+.current-prompt-bubble {
+  background: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin: 10px 0;
+  display: inline-block;
 }
