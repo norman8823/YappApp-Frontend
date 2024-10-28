@@ -8,7 +8,7 @@ import Landing from './components/Landing';
 import CreatePost from './components/CreatePost';
 import UpdatePost from './components/UpdatePost';
 import ViewDetailPost from './components/ViewDetailPost';
-import ViewDetailTopic from './components/ViewDetailTopic';
+import ViewDetailTopic from './components/ViewDetailPrompt';
 import UserProfile from './components/UserProfile';
 import SignIn from './components/SignIn';
 
@@ -49,7 +49,7 @@ const App = () => {
               }
             />
             <Route
-              path="/topic/:topicId"
+              path="/prompt/:promptId"
               element={
                 <ProtectedRoute>
                   <ViewDetailTopic />
@@ -57,7 +57,7 @@ const App = () => {
               }
               />
               <Route 
-              path="/topic/:promptId/create" 
+              path="/prompt/:promptId/create" 
               element={
                 <ProtectedRoute>
                   <CreatePost />

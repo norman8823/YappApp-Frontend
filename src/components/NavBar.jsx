@@ -1,4 +1,3 @@
-// src/components/NavBar.jsx
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -43,4 +42,5 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
 
