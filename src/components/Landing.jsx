@@ -6,34 +6,34 @@ import '../styles/Landing.css';
 const Landing = () => {
   const navigate = useNavigate();
   const [currentPrompt, setCurrentPrompt] = useState({
-    id: 1,
+    _id: "65f38b998428a2d7c37c2751",
     title: "Trump or Kamala",
     isHot: false
   });
 
   const [prompts, setPrompts] = useState([
     {
-      id: 1,
+      _id: "65f38b998428a2d7c37c2751", 
       title: "Pizza is overrated",
       isHot: false
     },
     {
-      id: 2,
+      _id: "65f38b998428a2d7c37c2752",
       title: "Bitcoin to 100k by end of year",
       isHot: true
     },
     {
-      id: 3,
+      _id: "65f38b998428a2d7c37c2753",
       title: "Government is behind hurricane",
       isHot: false
     },
     {
-      id: 4,
+      _id: "65f38b998428a2d7c37c2754",
       title: "We got self driving Teslas before GTA6",
       isHot: false
     },
     {
-      id: 5,
+      _id: "65f38b998428a2d7c37c2755",
       title: "The rent is too damn high",
       isHot: true
     }
