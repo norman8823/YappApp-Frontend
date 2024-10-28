@@ -15,7 +15,6 @@ const UserProfile = () => {
     const loadUserPosts = async () => {
       try {
         // Get all posts and filter for the current user
-        // You might want to add a dedicated endpoint for this
         const response = await postService.getPosts();
         const filteredPosts = response.filter(post => post.owner._id === user._id);
         setUserPosts(filteredPosts);
@@ -47,7 +46,7 @@ const UserProfile = () => {
           alt="avatar"
           className="profile-avatar"
         />
-        <h1>{user?.username}</h1>
+        <h3>{user?.username}</h3>
         <p>{user?.followers || 0} followers</p>
       </div>
 

@@ -55,7 +55,15 @@ const App = () => {
                   <ViewDetailTopic />
                 </ProtectedRoute>
               }
-            />
+              />
+              <Route 
+              path="/topic/:promptId/create" 
+              element={
+                <ProtectedRoute>
+                  <CreatePost />
+                </ProtectedRoute>
+              } 
+            />   
             <Route
               path="/post/create"
               element={

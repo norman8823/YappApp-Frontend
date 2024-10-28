@@ -40,20 +40,30 @@ export const getPostById = async (postId) => {  // renamed from 'show' to match 
 
 export const createPost = async (postData) => {
   try {
+    console.log('Sending post data:', postData); // Debug log
+
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No authentication token');
+
     const response = await fetch(`${BASE_URL}/posts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(postData)
     });
 
+    console.log('Response status:', response.status); // Debug log
+
+    const data = await response.json();
+    console.log('Response data:', data); // Debug log
+
     if (!response.ok) {
-      throw new Error('Failed to create post');
+      throw new Error(data.error || 'Failed to create post');
     }
 
-    return response.json();
+    return data;
   } catch (error) {
     console.error('Error creating post:', error);
     throw error;
