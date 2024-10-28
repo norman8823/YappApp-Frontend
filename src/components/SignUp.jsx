@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { signup } from '../services/authService';
 import '../styles/SignUp.css';
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const { signup } = useAuth();
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -12,7 +16,6 @@ const SignUp = () => {
   });
   const [avatar, setAvatar] = useState(0); // For avatar selection
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleAvatarChange = (direction) => {
     if (direction === 'next') {
@@ -49,11 +52,11 @@ const SignUp = () => {
 
   return (
     <div className="signup-container">
-      <h1>Create Profile</h1>
+      <h2>Create Profile</h2>
       
       <div className="avatar-selector">
         <img 
-          src="/api/placeholder/100/100"
+          src="/img/placeholderavatar.png"
           alt="avatar"
           className="avatar-preview"
         />

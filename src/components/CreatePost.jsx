@@ -9,32 +9,52 @@ const CreatePost = () => {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  const { signin, signup, signout, user } = useAuth();
-  // Assuming we're getting the prompt ID from the URL or props
-  const { promptId } = useParams(); // or pass it as a prop
+  const { user } = useAuth();
+  const { promptId } = useParams(); // Get the current prompt ID from URL
+  const location = useLocation();
+  const currentPrompt = location.state?.prompt;
 
+  console.log('Current user:', user); // Debug log
+  console.log('Prompt ID:', promptId); // Debug log
+  console.log('Current prompt:', currentPrompt); // Debug log
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!text.trim()) return;
+    
+    if (!text.trim()) {
+      setError('Post content cannot be empty');
+      return;
+    }
 
     setIsSubmitting(true);
     setError('');
 
     try {
-      const newPost = await postService.createPost({
-        owner: user._id,    
-        prompt: promptId,   
-        text: text.trim()   
+      console.log('Creating post with:', {
+        owner: user._id,
+        prompt: promptId,
+        text: text.trim()
       });
 
-      // Navigate to the topic/prompt view with the new post
+      const newPost = await postService.createPost({
+        owner: user._id,
+        prompt: promptId,
+        text: text.trim()
+      });
+
       navigate(`/topic/${promptId}`);
     } catch (err) {
+      console.error('Post creation error:', err);
       setError(err.message || 'Failed to create post');
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  // Add check for required data
+  if (!user || !promptId) {
+    return <div className="error-message">Missing required data to create post</div>;
+  }
 
   return (
     <div className="create-post-container">
@@ -45,7 +65,7 @@ const CreatePost = () => {
       <div className="post-form-container">
         <div className="user-info">
           <img 
-            src="/api/placeholder/40/40"
+            src="/img/placeholderavatar.png"
             alt="avatar"
             className="user-avatar"
           />
@@ -59,6 +79,7 @@ const CreatePost = () => {
             placeholder="Write your thoughts here..."
             className="post-input"
             disabled={isSubmitting}
+            required
           />
 
           {error && <div className="error-message">{error}</div>}

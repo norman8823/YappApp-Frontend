@@ -30,9 +30,13 @@ export const AuthProvider = ({ children }) => {
   const signup = async (userData) => {
     try {
       const response = await authService.signup(userData);
-      const user = response.user;
-      setUser(user);
-      return user;
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+        const user = authService.getUser(); // Parse the token to get user info
+        setUser(user); // Set the user in context
+        return response;
+      }
+      throw new Error('Signup failed');
     } catch (error) {
       console.error('Signup error:', error);
       throw error;
@@ -59,7 +63,13 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{
+      user,
+      signup,
+      signin,
+      signout,
+      isAuthenticated: !!user
+    }}>
       {children}
     </AuthContext.Provider>
   );
