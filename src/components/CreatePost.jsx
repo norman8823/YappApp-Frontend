@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import * as postService from '../services/postService';
 import '../styles/CreatePost.css';
@@ -42,7 +42,7 @@ const CreatePost = () => {
         text: text.trim()
       });
 
-      navigate(`/topic/${promptId}`);
+      navigate(`/prompt/${promptId}`);
     } catch (err) {
       console.error('Post creation error:', err);
       setError(err.message || 'Failed to create post');
@@ -59,7 +59,8 @@ const CreatePost = () => {
   return (
     <div className="create-post-container">
       <div className="header-section">
-        <h1 className="topic-title">Today's Topic</h1>
+        <h1 className="prompt-title">Today's Topic</h1>
+        {currentPrompt && <p className="prompt-text">{currentPrompt.title}</p>}
       </div>
 
       <div className="post-form-container">
@@ -69,7 +70,7 @@ const CreatePost = () => {
             alt="avatar"
             className="user-avatar"
           />
-          <span className="username">{user?.username}</span>
+          <span className="username">{user.username}</span>
         </div>
 
         <form onSubmit={handleSubmit} className="post-form">
