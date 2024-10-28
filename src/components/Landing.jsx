@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Add useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import { Flame } from 'lucide-react';
 import '../styles/Landing.css';
 
 const Landing = () => {
-  const navigate = useNavigate(); // Initialize navigate
-  const [topics, setTopics] = useState([
+  const navigate = useNavigate();
+  const [currentPrompt, setCurrentPrompt] = useState({
+    id: 1,
+    title: "Trump or Kamala",
+    isHot: false
+  });
+
+  const [prompts, setPrompts] = useState([
     {
       id: 1,
       title: "Pizza is overrated",
@@ -33,35 +39,41 @@ const Landing = () => {
     }
   ]);
 
-  const handleYapClick = () => {
-    navigate('/post/create');
+  const handleCreatePost = () => {
+    navigate(`/prompt/${currentPrompt.id}/create`, {
+      state: { prompt: currentPrompt }
+    });
   };
 
   return (
     <div className="landing-container">
       <div className="header-section">
-        <div className="topic-header">
-          <h1 className="topic-of-day">Today's Topic</h1>
+        <div className="prompt-header">
+          <h3 className="prompt-of-day">Today's Topic</h3>
+          <div className="current-prompt-bubble">
+            {currentPrompt.title}
+          </div>
         </div>
         <button 
-          onClick={handleYapClick}
+          onClick={handleCreatePost}
           className="yap-button"
         >
           Yap
         </button>
       </div>
 
-      <div className="topics-section">
-        {topics.map((topic) => (
+      <div className="prompts-section">
+        {prompts.map((prompt) => (
           <Link 
-            key={topic.id} 
-            to={`/topic/${topic.id}`}
-            className="topic-bubble-container"
+            key={prompt.id} 
+            to={`/prompt/${prompt.id}`}
+            className="prompt-bubble-container"
+            onClick={() => setCurrentPrompt(prompt)}
           >
-            <div className="topic-bubble">
-              {topic.title}
+            <div className="prompt-bubble">
+              {prompt.title}
             </div>
-            {topic.isHot && (
+            {prompt.isHot && (
               <Flame 
                 size={24}
                 className="hot-indicator"

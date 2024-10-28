@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import * as postService from '../services/postService';
 import '../styles/ViewDetailTopic.css';
 
-const ViewDetailTopic = () => {
+const ViewDetailPrompt = () => {
   const { promptId } = useParams(); // this should be promptId to match backend
   const [posts, setPosts] = useState([]);
 
@@ -73,4 +73,4 @@ const ViewDetailTopic = () => {
   );
 };
 
-export default ViewDetailTopic;
+export default ViewDetailPrompt;
