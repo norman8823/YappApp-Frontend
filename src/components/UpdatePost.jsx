@@ -7,7 +7,7 @@ import '../styles/UpdatePost.css';
 const UpdatePost = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { signin, signup, signout, user } = useAuth();
   
   const [content, setContent] = useState('');
   const [error, setError] = useState('');

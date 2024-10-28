@@ -1,87 +1,81 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { getProfile } from '../services/profileService';
-import { show } from '../services/postService';
+import * as postService from '../services/postService';
 import '../styles/UserProfile.css';
 
 const UserProfile = () => {
   const { user } = useAuth();
-  const [profile, setProfile] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadProfile = async () => {
-      try {
-        const data = await getProfile(user._id);
-        if (data.error) {
-          setError(data.error);
-        } else {
-          setProfile(data.user);
-        }
-      } catch (err) {
-        setError('Failed to load profile');
-      }
-    };
-
     const loadUserPosts = async () => {
       try {
-        const data = await show(user._id);
-        if (data.error) {
-          setError(data.error);
-        } else {
-          setUserPosts(data);
-        }
+        // Get all posts and filter for the current user
+        // You might want to add a dedicated endpoint for this
+        const response = await postService.getPosts();
+        const filteredPosts = response.filter(post => post.owner._id === user._id);
+        setUserPosts(filteredPosts);
       } catch (err) {
         setError('Failed to load posts');
+      } finally {
+        setIsLoading(false);
       }
     };
 
     if (user) {
-      loadProfile();
       loadUserPosts();
     }
   }, [user]);
+
+  const handleEditPost = (postId) => {
+    navigate(`/post/${postId}/edit`);
+  };
+
+  if (isLoading) {
+    return <div className="loading">Loading profile...</div>;
+  }
 
   return (
     <div className="profile-container">
       <div className="profile-header">
         <img 
-          src="/api/placeholder/100/100"
+          src="/img/placeholderavatar.png"
           alt="avatar"
           className="profile-avatar"
         />
-        <h1>{profile?.username}</h1>
-        <p>{profile?.followers || 0} followers</p>
-        <button 
-          onClick={() => navigate('/edit-profile')}
-          className="edit-profile-button"
-        >
-          Edit Profile
-        </button>
+        <h1>{user?.username}</h1>
+        <p>{user?.followers || 0} followers</p>
       </div>
 
       <div className="user-posts">
-        <h2>User's Posts</h2>
-        {userPosts.map(post => (
-          <div key={post._id} className="post-card">
-            <p>{post.content}</p>
-            <div className="post-footer">
-              <span>Posted {new Date(post.createdAt).toLocaleDateString()}</span>
-              <button 
-                onClick={() => navigate(`/post/${post._id}/edit`)}
-                className="edit-post-button"
-              >
-                ✏️
-              </button>
+        <h2>Your Posts</h2>
+        {error && <div className="error-message">{error}</div>}
+        
+        {userPosts.length === 0 ? (
+          <p className="no-posts">No posts yet</p>
+        ) : (
+          userPosts.map(post => (
+            <div key={post._id} className="post-card">
+              <p className="post-text">{post.text}</p>
+              <div className="post-footer">
+                <span className="post-date">
+                  Posted {new Date(post.createdAt).toLocaleDateString()}
+                </span>
+                <button
+                  onClick={() => handleEditPost(post._id)}
+                  className="edit-button"
+                >
+                  Edit
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
-
-      {error && <div className="error-message">{error}</div>}
     </div>
   );
 };

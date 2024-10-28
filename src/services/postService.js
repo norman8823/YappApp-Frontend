@@ -1,89 +1,104 @@
-const BASE_URL = `${import.meta.env.VITE_EXPRESS_BACKEND_URL}/posts`;
+const BASE_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL || 'http://localhost:3000';
 
-export const index = async () => {
+export const getPostsByPrompt = async (promptId) => {
   try {
-    const res = await fetch(BASE_URL, {
-      headers: { 
-        Authorization: `Bearer ${localStorage.getItem('token')}` 
-      },
+    const response = await fetch(`${BASE_URL}/posts/prompt/${promptId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
     });
-    return res.json();
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch posts');
+    }
+
+    return response.json();
   } catch (error) {
-    console.log(error);
+    console.error('Error fetching posts:', error);
+    throw error;
   }
 };
 
-export const create = async (postFormData) => {
+export const getPostById = async (postId) => {  // renamed from 'show' to match backend
   try {
-    const res = await fetch(BASE_URL, {
+    const response = await fetch(`${BASE_URL}/posts/${postId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch post');
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    throw error;
+  }
+};
+
+export const createPost = async (postData) => {
+  try {
+    const response = await fetch(`${BASE_URL}/posts`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`
       },
-      body: JSON.stringify(postFormData),
+      body: JSON.stringify(postData)
     });
-    return res.json();
+
+    if (!response.ok) {
+      throw new Error('Failed to create post');
+    }
+
+    return response.json();
   } catch (error) {
-    console.log(error);
+    console.error('Error creating post:', error);
+    throw error;
   }
 };
 
-export const show = async (postId) => {
+export const updatePost = async (postId, postData) => {
   try {
-    const res = await fetch(`${BASE_URL}/${postId}`, {
-      headers: { 
-        Authorization: `Bearer ${localStorage.getItem('token')}` 
-      },
-    });
-    return res.json();
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const update = async (postId, postData) => {
-  try {
-    const res = await fetch(`${BASE_URL}/${postId}`, {
+    const response = await fetch(`${BASE_URL}/posts/${postId}`, {
       method: 'PUT',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`
       },
-      body: JSON.stringify(postData),
+      body: JSON.stringify(postData)
     });
-    return res.json();
+
+    if (!response.ok) {
+      throw new Error('Failed to update post');
+    }
+
+    return response.json();
   } catch (error) {
-    console.log(error);
+    console.error('Error updating post:', error);
+    throw error;
   }
 };
 
 export const deletePost = async (postId) => {
   try {
-    const res = await fetch(`${BASE_URL}/${postId}`, {
+    const response = await fetch(`${BASE_URL}/posts/${postId}`, {
       method: 'DELETE',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
     });
-    return res.json();
+
+    if (!response.ok) {
+      throw new Error('Failed to delete post');
+    }
+
+    return response.status === 204 ? null : response.json();
   } catch (error) {
-    console.log(error);
+    console.error('Error deleting post:', error);
+    throw error;
   }
 };
 
-export const createComment = async (postId, commentFormData) => {
-  try {
-    const res = await fetch(`${BASE_URL}/${postId}/comments`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(commentFormData),
-    });
-    return res.json();
-  } catch (error) {
-    console.log(error);
-  }
-};

@@ -1,38 +1,44 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import * as postService from '../services/postService';
 import '../styles/CreatePost.css';
 
 const CreatePost = () => {
-  const [content, setContent] = useState('');
+  const [text, setText] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { signin, signup, signout, user } = useAuth();
+  // Assuming we're getting the prompt ID from the URL or props
+  const { promptId } = useParams(); // or pass it as a prop
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!content.trim()) {
-      setError('Post content cannot be empty');
-      return;
-    }
+    if (!text.trim()) return;
+
+    setIsSubmitting(true);
+    setError('');
 
     try {
-      const newPost = await postService.create({
-        content,
-        author: user._id,
+      const newPost = await postService.createPost({
+        owner: user._id,    
+        prompt: promptId,   
+        text: text.trim()   
       });
 
-      navigate(`/topic/${newPost.topic}`);
+      // Navigate to the topic/prompt view with the new post
+      navigate(`/topic/${promptId}`);
     } catch (err) {
-      setError('Failed to create post');
+      setError(err.message || 'Failed to create post');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="create-post-container">
-      <div className="post-header">
+      <div className="header-section">
         <h1 className="topic-title">Today's Topic</h1>
       </div>
 
@@ -48,17 +54,21 @@ const CreatePost = () => {
 
         <form onSubmit={handleSubmit} className="post-form">
           <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
             placeholder="Write your thoughts here..."
             className="post-input"
-            rows={6}
+            disabled={isSubmitting}
           />
 
           {error && <div className="error-message">{error}</div>}
 
-          <button type="submit" className="post-button">
-            Post
+          <button 
+            type="submit" 
+            className="post-button"
+            disabled={isSubmitting || !text.trim()}
+          >
+            {isSubmitting ? 'Posting...' : 'Post'}
           </button>
         </form>
       </div>

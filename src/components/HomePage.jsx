@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Flame, MessageCircle } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import AuthModal from './AuthModal';
 import '../styles/HomePage.css';
 
 const HomePage = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [topics, setTopics] = useState([
     {
       id: 1,
@@ -38,6 +42,12 @@ const HomePage = () => {
     setIsAuthModalOpen(true);
   };
 
+  useEffect(() => {
+    if (user) {
+      navigate('/landing');
+    }
+  }, [user, navigate]);
+  
   return (
     <div className="home-container">
       {/* Only the header section and content */}

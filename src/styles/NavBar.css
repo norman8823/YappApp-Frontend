@@ -48,4 +48,20 @@
   .secondary-button:hover {
     background-color: #d1d5db;
   }
+
+  .logout-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+}
+
+.logout-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
   

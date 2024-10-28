@@ -5,73 +5,37 @@ import '../styles/AuthModal.css';
 
 const AuthModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
-  const { signin, signup } = useAuth();
+  const { signin } = useAuth();
   const [isSignUp, setIsSignUp] = useState(false);
   
   const [formData, setFormData] = useState({
     username: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
+    password: ''
   });
   
   const [error, setError] = useState('');
-  const [avatarIndex, setAvatarIndex] = useState(0);
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleAvatarChange = (direction) => {
-    if (direction === 'next') {
-      setAvatarIndex((prev) => (prev + 1) % 5); // Assuming 5 avatars
-    } else {
-      setAvatarIndex((prev) => (prev - 1 + 5) % 5);
-    }
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     try {
       if (isSignUp) {
-        // Validate signup form
-        if (formData.password !== formData.confirmPassword) {
-          setError('Passwords do not match');
-          return;
-        }
-
-        const signupData = {
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-          avatar: avatarIndex
-        };
-
-        await signup(signupData);
+        await signup(formData);
       } else {
-        // Handle signin
-        await signin({
-          username: formData.username,
-          password: formData.password
-        });
+        await signin(formData);
       }
-
-      // Clear form and close modal on success
-      setFormData({
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-      });
+      
+      // Close the modal and navigate AFTER successful auth
       onClose();
       navigate('/landing');
     } catch (err) {
-      setError(err.message);
+      console.error('Auth error:', err);
+      setError(err.message || 'Authentication failed');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -80,92 +44,47 @@ const AuthModal = ({ isOpen, onClose }) => {
   return (
     <div className="auth-modal-overlay">
       <div className="auth-modal">
-        <button className="close-button" onClick={onClose}>×</button>
-        
         <h2 className="auth-modal-title">
-          {isSignUp ? 'Create Profile' : 'Sign In'}
+          {isSignUp ? 'Create Account' : 'Sign In'}
         </h2>
-
+        
         {error && <div className="error-message">{error}</div>}
-
+        
         <form onSubmit={handleSubmit} className="auth-form">
-          {isSignUp && (
-            <div className="avatar-section">
-              <img 
-                src={`/api/placeholder/100/100`} 
-                alt="avatar" 
-                className="avatar-preview"
-              />
-              <div className="avatar-controls">
-                <button 
-                  type="button" 
-                  onClick={() => handleAvatarChange('prev')}
-                  className="avatar-button"
-                >
-                  &lt;
-                </button>
-                <button 
-                  type="button"
-                  onClick={() => handleAvatarChange('next')}
-                  className="avatar-button"
-                >
-                  &gt;
-                </button>
-              </div>
-              <p className="follower-count">0 followers</p>
-            </div>
-          )}
-
           <div className="form-group">
             <label>Username</label>
             <input
               type="text"
-              name="username"
               value={formData.username}
-              onChange={handleChange}
+              onChange={(e) => setFormData({
+                ...formData,
+                username: e.target.value
+              })}
               required
+              disabled={isLoading}
             />
           </div>
-
-          {isSignUp && (
-            <div className="form-group">
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          )}
 
           <div className="form-group">
-            <label>{isSignUp ? 'Create Password' : 'Password'}</label>
+            <label>Password</label>
             <input
               type="password"
-              name="password"
               value={formData.password}
-              onChange={handleChange}
+              onChange={(e) => setFormData({
+                ...formData,
+                password: e.target.value
+              })}
               required
+              disabled={isLoading}
             />
           </div>
 
-          {isSignUp && (
-            <div className="form-group">
-              <label>Confirm Password</label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          )}
-
-          <button type="submit" className="submit-button">
-            {isSignUp ? 'Create Profile' : 'Sign In'}
+          <button 
+            type="submit" 
+            className="submit-button"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Please wait...' : (isSignUp ? 'Sign Up' : 'Login')}
           </button>
 
           <button
@@ -174,13 +93,9 @@ const AuthModal = ({ isOpen, onClose }) => {
             onClick={() => {
               setIsSignUp(!isSignUp);
               setError('');
-              setFormData({
-                username: '',
-                email: '',
-                password: '',
-                confirmPassword: ''
-              });
+              setFormData({ username: '', password: '' });
             }}
+            disabled={isLoading}
           >
             {isSignUp 
               ? 'Already have an account? Sign in' 

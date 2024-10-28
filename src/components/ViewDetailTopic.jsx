@@ -5,24 +5,22 @@ import * as postService from '../services/postService';
 import '../styles/ViewDetailTopic.css';
 
 const ViewDetailTopic = () => {
-  const { topicId } = useParams();
-  const { user } = useAuth();
-  const [topic, setTopic] = useState(null);
+  const { promptId } = useParams(); // this should be promptId to match backend
   const [posts, setPosts] = useState([]);
-  const [error, setError] = useState('');
 
   useEffect(() => {
-    const loadTopicAndPosts = async () => {
+    const loadPosts = async () => {
       try {
-        const data = await postService.getTopicPosts(topicId);
-        setTopic(data.topic);
-        setPosts(data.posts);
+        const fetchedPosts = await postService.getPostsByPrompt(topicId);
+        setPosts(fetchedPosts);
       } catch (err) {
-        setError('Failed to load topic');
+        setError('Failed to load posts');
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    loadTopicAndPosts();
+    loadPosts();
   }, [topicId]);
 
   const handleGenerateAISummary = async () => {

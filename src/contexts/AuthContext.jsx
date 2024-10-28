@@ -1,11 +1,8 @@
-// src/contexts/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as authService from '../services/authService';
 
-// Create the context
 const AuthContext = createContext(null);
 
-// Provider component
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,26 +15,31 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const signup = async (userData) => {
-    try {
-      const response = await authService.signup(userData);
-      setUser(response.user);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
-
   const signin = async (credentials) => {
     try {
-      const user = await authService.signin(credentials);
+      const response = await authService.signin(credentials);
+      const user = response.user;
       setUser(user);
       return user;
     } catch (error) {
+      console.error('Signin error:', error);
       throw error;
     }
   };
 
+  const signup = async (userData) => {
+    try {
+      const response = await authService.signup(userData);
+      const user = response.user;
+      setUser(user);
+      return user;
+    } catch (error) {
+      console.error('Signup error:', error);
+      throw error;
+    }
+  };
+
+  // Add signout function
   const signout = () => {
     authService.signout();
     setUser(null);
@@ -45,10 +47,10 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     user,
-    isLoading,
-    signup,
     signin,
+    signup,
     signout,
+    isLoading,
     isAuthenticated: !!user
   };
 
@@ -63,7 +65,6 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook for using auth context
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {

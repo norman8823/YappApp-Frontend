@@ -1,83 +1,108 @@
-/* src/styles/Landing.css */
-
 .landing-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  /* Header Section */
-  .landing-header {
-    background-color: #FFE4C4;
-    padding: 20px;
-    text-align: center;
-    border-radius: 8px;
-    margin-bottom: 20px;
-  }
-  
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header-section {
+  background-color: #FFE4C4;
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.topic-header {
+  margin-bottom: 150px; /* Add space between title and button */
+}
+
+.topic-of-day {
+  font-size: 1.5rem;
+  display: inline-block;
+  background: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin: 50px;
+}
+
+.yap-button {
+  background-color: #f97316;
+  color: white;
+  border: none;
+  padding: 12px 36px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.yap-button:hover {
+  background-color: #ea580c;
+}
+
+.topics-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.topic-bubble-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.topic-bubble {
+  background: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.topic-bubble:hover {
+  transform: translateX(5px);
+}
+
+.hot-indicator {
+  flex-shrink: 0;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
   .topic-of-day {
-    display: inline-block;
-    background: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    margin: 10px 0;
-    font-size: 1.2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .yap-button {
-    background-color: #f97316;
+    background: #1f2937;
     color: white;
-    border: none;
-    padding: 8px 24px;
-    border-radius: 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    margin-top: 10px;
   }
-  
-  .yap-button:hover {
-    background-color: #ea580c;
-  }
-  
-  /* Topics Feed Section */
-  .topic-feed {
-    margin-top: 20px;
-  }
-  
+
   .topic-bubble {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
+    background: #1f2937;
+    color: white;
   }
-  
-  .bubble-content {
-    background: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: relative;
-    flex-grow: 1;
-  }
-  
-  .hot-indicator {
-    margin-left: 10px;
-    color: #ef4444;
-  }
-  
-  /* Browse Past Topics Section */
-  .past-topics {
-    background-color: #f9fafb;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .landing-container {
     padding: 10px;
-    border-radius: 8px;
   }
-  
-  .past-topics-label {
+
+  .header-section {
+    padding: 30px 15px;
+  }
+
+  .topic-of-day {
+    font-size: 1.25rem;
+  }
+
+  .yap-button {
+    padding: 10px 30px;
     font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 10px;
   }
-  
+}
