@@ -6,7 +6,7 @@ import '../styles/Landing.css';
 const Landing = () => {
   const navigate = useNavigate();
   const [currentPrompt, setCurrentPrompt] = useState({
-    _id: "65f38b998428a2d7c37c2751",
+    _id: "65f38b998428a2d7c37c2750",
     title: "Trump or Kamala",
     isHot: false
   });
@@ -40,7 +40,7 @@ const Landing = () => {
   ]);
 
   const handleCreatePost = () => {
-    navigate(`/prompt/${currentPrompt.id}/create`, {
+    navigate(`/prompt/${currentPrompt._id}/create`, {
       state: { prompt: currentPrompt }
     });
   };
@@ -65,8 +65,8 @@ const Landing = () => {
       <div className="prompts-section">
         {prompts.map((prompt) => (
           <Link 
-            key={prompt.id} 
-            to={`/prompt/${prompt.id}`}
+            key={prompt._id} 
+            to={`/prompt/${prompt._id}`}
             className="prompt-bubble-container"
             onClick={() => setCurrentPrompt(prompt)}
           >

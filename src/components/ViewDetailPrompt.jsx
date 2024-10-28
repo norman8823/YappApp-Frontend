@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import * as postService from '../services/postService';
-import '../styles/ViewDetailTopic.css';
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import * as postService from "../services/postService";
+import "../styles/ViewDetailPrompt.css";
 
 const ViewDetailPrompt = () => {
   const { promptId } = useParams(); // this should be promptId to match backend
@@ -11,32 +11,34 @@ const ViewDetailPrompt = () => {
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        const fetchedPosts = await postService.getPostsByPrompt(topicId);
+        const fetchedPosts = await postService.getPostsByPrompt(promptId);
         setPosts(fetchedPosts);
       } catch (err) {
-        setError('Failed to load posts');
-      } finally {
-        setIsLoading(false);
+        setError("Failed to load posts");
+        // } finally {
+        //   setIsLoading(false);
       }
     };
 
     loadPosts();
-  }, [topicId]);
+  }, [promptId]);
 
   const handleGenerateAISummary = async () => {
     try {
       // Implement AI summary generation
-      console.log('Generating AI summary...');
+      console.log("Generating AI summary...");
     } catch (err) {
-      setError('Failed to generate summary');
+      setError("Failed to generate summary");
     }
   };
 
+  console.log(posts);
+
   return (
-    <div className="topic-container">
-      <div className="topic-header">
-        <h1 className="topic-title">{topic?.title}</h1>
-        <button 
+    <div className="prompt-container">
+      <div className="prompt-header">
+        <h1 className="prompt-title">{prompt?.title}</h1>
+        <button
           onClick={handleGenerateAISummary}
           className="generate-summary-btn"
         >
@@ -45,18 +47,18 @@ const ViewDetailPrompt = () => {
       </div>
 
       <div className="posts-feed">
-        {posts.map(post => (
+        {posts.map((post) => (
           <div key={post._id} className="post-card">
-            <div className="post-author">
-              <img 
+            <div className="post-owner">
+              <img
                 src="/api/placeholder/40/40"
                 alt="avatar"
-                className="author-avatar"
+                className="owner-avatar"
               />
-              <span>{post.author.username}</span>
+              <span>{post.owner.username}</span>
             </div>
 
-            <p className="post-content">{post.content}</p>
+            <p className="post-text">{post.text}</p>
 
             <div className="post-stats">
               <Link to={`/post/${post._id}`}>
@@ -68,7 +70,7 @@ const ViewDetailPrompt = () => {
         ))}
       </div>
 
-      {error && <div className="error-message">{error}</div>}
+      {/* {error && <div className="error-message">{error}</div>} */}
     </div>
   );
 };
