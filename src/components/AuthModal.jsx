@@ -22,13 +22,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     setIsLoading(true);
 
     try {
-      if (isSignUp) {
-        await signup(formData);
-      } else {
-        await signin(formData);
-      }
-      
-      // Close the modal and navigate AFTER successful auth
+      await signin(formData);
       onClose();
       navigate('/landing');
     } catch (err) {
@@ -39,14 +33,17 @@ const AuthModal = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleSignUpClick = () => {
+    onClose(); // Close the modal first
+    navigate('/signup'); // Then navigate to signup page
+  };
+
   if (!isOpen) return null;
 
   return (
     <div className="auth-modal-overlay">
       <div className="auth-modal">
-        <h2 className="auth-modal-title">
-          {isSignUp ? 'Create Account' : 'Sign In'}
-        </h2>
+        <h2 className="auth-modal-title">Sign In</h2>
         
         {error && <div className="error-message">{error}</div>}
         
@@ -84,27 +81,20 @@ const AuthModal = ({ isOpen, onClose }) => {
             className="submit-button"
             disabled={isLoading}
           >
-            {isLoading ? 'Please wait...' : (isSignUp ? 'Sign Up' : 'Login')}
+            {isLoading ? 'Please wait...' : 'Login'}
           </button>
 
           <button
             type="button"
             className="toggle-auth-mode"
-            onClick={() => {
-              setIsSignUp(!isSignUp);
-              setError('');
-              setFormData({ username: '', password: '' });
-            }}
+            onClick={handleSignUpClick}
             disabled={isLoading}
           >
-            {isSignUp 
-              ? 'Already have an account? Sign in' 
-              : 'Need an account? Sign up'}
+            Need an account? Sign up
           </button>
         </form>
       </div>
     </div>
   );
 };
-
 export default AuthModal;
