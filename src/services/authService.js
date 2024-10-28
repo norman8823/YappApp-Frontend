@@ -22,7 +22,7 @@ export const signup = async (userData) => {
 
 export const signin = async (credentials) => {
   try {
-    const response = axios.post(`${BASE_URL}/users/sigin`, credentials);
+    const response = await axios.post(`${BASE_URL}/users/signin`, credentials);
 
     console.log("Attempting signin with:", credentials); // Debug log
 

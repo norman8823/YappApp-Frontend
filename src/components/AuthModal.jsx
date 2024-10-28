@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "../styles/AuthModal.css";
@@ -22,7 +22,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     setIsLoading(true);
 
     try {
-      // Close the modal and navigate AFTER successful auth
+      await signin(formData);
       onClose();
       navigate("/landing");
     } catch (err) {
@@ -43,6 +43,8 @@ const AuthModal = ({ isOpen, onClose }) => {
   return (
     <div className="auth-modal-overlay">
       <div className="auth-modal">
+        <h2 className="auth-modal-title">Sign In</h2>
+
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
@@ -85,8 +87,11 @@ const AuthModal = ({ isOpen, onClose }) => {
           <button
             type="button"
             className="toggle-auth-mode"
+            onClick={handleSignUpClick}
             disabled={isLoading}
-          ></button>
+          >
+            Need an account? Sign up
+          </button>
         </form>
       </div>
     </div>
