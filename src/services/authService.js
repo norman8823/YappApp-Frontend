@@ -1,58 +1,81 @@
-const BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
+const BASE_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL || 'http://localhost:3000';
 
-export const getUser = () => {
-  const token = localStorage.getItem('token');
-  if (!token) return null;
+export const signup = async (userData) => {
   try {
-    const user = JSON.parse(atob(token.split('.')[1]));
-    return user;
-  } catch (err) {
-    console.error('Error parsing token:', err);
-    localStorage.removeItem('token');
-    return null;
-  }
-};
-
-export const signup = async (formData) => {
-  try {
-    const res = await fetch(`${BACKEND_URL}/users/signup`, {
+    const response = await fetch(`${BASE_URL}/users/signup`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData)
     });
-    const json = await res.json();
-    if (json.error) {
-      throw new Error(json.error);
+
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.error || 'Signup failed');
     }
-    localStorage.setItem('token', json.token);
-    return json;
-  } catch (err) {
-    throw new Error(err.message);
+
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Signup error:', error);
+    throw error;
   }
 };
 
 export const signin = async (credentials) => {
   try {
-    const res = await fetch(`${BACKEND_URL}/users/signin`, {
+    console.log('Attempting signin with:', credentials); // Debug log
+
+    const response = await fetch(`${BASE_URL}/users/signin`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials)
     });
-    const json = await res.json();
-    if (json.error) {
-      throw new Error(json.error);
+
+    console.log('Response status:', response.status); // Debug log
+
+    const data = await response.json();
+    console.log('Response data:', data); // Debug log
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Signin failed');
     }
-    if (json.token) {
-      localStorage.setItem('token', json.token);
-      const user = JSON.parse(atob(json.token.split('.')[1]));
-      return user;
+
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+      // Parse and return the user data from the token
+      const user = JSON.parse(atob(data.token.split('.')[1]));
+      return { user, token: data.token };
+    } else {
+      throw new Error('No token received');
     }
-  } catch (err) {
-    console.error(err);
-    throw err;
+  } catch (error) {
+    console.error('Signin error:', error);
+    throw error;
   }
 };
 
 export const signout = () => {
   localStorage.removeItem('token');
+};
+
+export const getUser = () => {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload;
+  } catch (error) {
+    console.error('Error parsing token:', error);
+    localStorage.removeItem('token');
+    return null;
+  }
 };

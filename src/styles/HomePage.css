@@ -1,0 +1,187 @@
+
+.home-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header Section */
+.header-section {
+  background-color: #FFE4C4;
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.app-logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
+}
+
+.app-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.app-subtitle {
+  font-family: monospace;
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.login-button {
+  display: inline-block;
+  background-color: #f97316;
+  color: white;
+  padding: 12px 40px;
+  border-radius: 50px;
+  border: none;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-button:hover {
+  background-color: #ea580c;
+}
+
+/* Topics Section */
+.topics-section {
+  padding: 20px 0;
+}
+
+.browse-topics-label {
+  display: inline-block;
+  background-color: #f0f0f0;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.topics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.topic-bubble-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.topic-bubble-container:hover {
+  opacity: 1;
+}
+
+.topic-bubble-container::after {
+  content: 'Sign in to view';
+  position: absolute;
+  right: -100px;
+  color: #666;
+  font-size: 0.8rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.topic-bubble-container:hover::after {
+  opacity: 1;
+}
+
+.topic-bubble {
+  background: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  max-width: fit-content;
+}
+
+.hot-indicator {
+  flex-shrink: 0;
+}
+
+/* Navigation */
+.nav-right {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.signup-link {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.signup-link:hover {
+  color: #f97316;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .home-container {
+    padding: 10px;
+  }
+
+  .header-section {
+    padding: 30px 15px;
+  }
+
+  .app-title {
+    font-size: 1.75rem;
+  }
+
+  .app-subtitle {
+    font-size: 1rem;
+  }
+
+  .topic-bubble {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .topic-bubble-container::after {
+    display: none; /* Hide hover text on mobile */
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .topic-bubble {
+    background: #1f2937;
+    color: white;
+  }
+
+  .browse-topics-label {
+    background-color: #374151;
+    color: #d1d5db;
+  }
+
+  .signup-link {
+    color: #d1d5db;
+  }
+
+  .signup-link:hover {
+    color: #f97316;
+  }
+
+  .topic-bubble-container::after {
+    color: #d1d5db;
+  }
+}
