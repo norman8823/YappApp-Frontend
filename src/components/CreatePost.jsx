@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import * as postService from '../services/postService';
@@ -14,10 +14,16 @@ const CreatePost = () => {
   const location = useLocation();
   const currentPrompt = location.state?.prompt;
 
-  console.log('Current user:', user); // Debug log
-  console.log('Prompt ID:', promptId); // Debug log
-  console.log('Current prompt:', currentPrompt); // Debug log
-  
+  useEffect(() => {
+    console.log('Current user:', user);
+    console.log('Prompt ID:', promptId);
+    console.log('Current prompt:', currentPrompt);
+    
+    if (!promptId || promptId === 'undefined') {
+      navigate('/landing');
+    }
+  }, [promptId, navigate]); // Added proper dependencies
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -28,7 +34,7 @@ const CreatePost = () => {
 
     setIsSubmitting(true);
     setError('');
-
+    
     try {
       console.log('Creating post with:', {
         owner: user._id,

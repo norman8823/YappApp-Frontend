@@ -45,13 +45,25 @@ export const createPost = async (postData) => {
     const token = localStorage.getItem('token');
     if (!token) throw new Error('No authentication token');
 
+    const formattedData = {
+      owner: postData.owner,
+      prompt: postData.prompt, // Make sure this is a valid MongoDB ObjectId
+      text: postData.text
+    };
+
+    console.log('Formatted data:', formattedData); // Debug log
+
     const response = await fetch(`${BASE_URL}/posts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify(postData)
+      body: JSON.stringify({
+        owner: postData.owner,
+        prompt: postData.prompt,
+        text: postData.text
+      })
     });
 
     console.log('Response status:', response.status); // Debug log
