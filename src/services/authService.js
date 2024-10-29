@@ -8,7 +8,7 @@ export const signup = async (userData) => {
     const response = await axios.post(`${BASE_URL}/users/signup`, userData);
 
     if (response.data.error) {
-      throw new Error(data.error || "Signup failed");
+      throw new Error(response.data.error || "Signup failed");
     }
 
     localStorage.setItem("token", response.data.token);
@@ -42,6 +42,29 @@ export const signin = async (credentials) => {
     }
   } catch (error) {
     console.error("Signin error:", error);
+    throw error;
+  }
+};
+
+export const signinWithGoogle = async (googleUser) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/auth/google/callback`, {
+      token: googleUser.token,
+    });
+
+    if (response.data.error) {
+      throw new Error(response.data.error || "Google Sign-In failed");
+    }
+
+    if (response.data.token) {
+      localStorage.setItem("token", response.data.token);
+      const user = JSON.parse(atob(response.data.token.split(".")[1]));
+      return { user, token: response.data.token };
+    } else {
+      throw new Error("No token received");
+    }
+  } catch (error) {
+    console.error("Google Sign-In error:", error);
     throw error;
   }
 };
