@@ -1,74 +1,137 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import * as postService from '../services/postService';
-import '../styles/ViewDetailTopic.css';
+import React, { useState, useEffect } from "react";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import * as postService from "../services/postService";
+import { Pencil, Trash2 } from 'lucide-react';
+import EditPostModal from './EditPostModal';
+import "../styles/ViewDetailPrompt.css";
 
 const ViewDetailPrompt = () => {
-  const { promptId } = useParams(); // this should be promptId to match backend
+  const { promptId } = useParams();
   const [posts, setPosts] = useState([]);
+  const [promptTitle, setPromptTitle] = useState('')
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentPrompt = location.state?.prompt;
+  const [ editingPost, setEditingPost ] = useState(null);
 
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        const fetchedPosts = await postService.getPostsByPrompt(topicId);
+        const fetchedPosts = await postService.getPostsByPrompt(promptId);
         setPosts(fetchedPosts);
       } catch (err) {
-        setError('Failed to load posts');
+        setError("Failed to load posts");
       } finally {
         setIsLoading(false);
       }
     };
 
     loadPosts();
-  }, [topicId]);
+  }, [promptId]);
 
-  const handleGenerateAISummary = async () => {
+  console.log(location.state)
+
+  const handleEdit = (post) => {
+    setEditingPost(post);
+  };
+
+  const handleUpdate = async (newText) => {
     try {
-      // Implement AI summary generation
-      console.log('Generating AI summary...');
+      const updatedPost = await postService.updatePost(editingPost._id, {
+        text: newText
+      });
+      setPosts(posts.map(post =>
+        post._id === editingPost._id ? { ...post, text:newText } : post
+      ));
+      setEditingPost(null);
     } catch (err) {
-      setError('Failed to generate summary');
+      throw new Error('Failed to update');
     }
   };
 
+  const handleDelete = async (postId) => {
+    if (window.confirm('Are you sure you want to delete this post?')) {
+      try {
+        await postService.deletePost(postId);
+        setPosts(posts.filter(post => post._id !== postId));
+      } catch (err) {
+        setError('Failed to delete post');
+      }
+    }
+  };
+
+  if (isLoading) return <div className="loading">Loading posts...</div>;
+
   return (
-    <div className="topic-container">
-      <div className="topic-header">
-        <h1 className="topic-title">{topic?.title}</h1>
-        <button 
-          onClick={handleGenerateAISummary}
-          className="generate-summary-btn"
-        >
-          Generate AI Summary
-        </button>
+    <div className="prompt-container">
+      <div className="header-section">
+        <h1 className="prompt-title">Today's Topic</h1>
+        {currentPrompt && <p className="prompt-text">{currentPrompt.title}</p>}
       </div>
 
       <div className="posts-feed">
-        {posts.map(post => (
+        {posts.map((post) => (
           <div key={post._id} className="post-card">
-            <div className="post-author">
-              <img 
-                src="/api/placeholder/40/40"
-                alt="avatar"
-                className="author-avatar"
-              />
-              <span>{post.author.username}</span>
+            <div className="post-header">
+              <div className="post-owner">
+                <img
+                  src="/img/placeholderavatar.png"
+                  alt="avatar"
+                  className="owner-avatar"
+                />
+                <span>{post.owner.username}</span>
+              </div>
+              
+              {user && post.owner._id === user._id && (
+                <div className="post-actions">
+                  <button
+                    onClick={() => handleEdit(post)}
+                    className="edit-button"
+                    title="Edit post"
+                  >
+                    <Pencil size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(post._id)}
+                    className="delete-button"
+                    title="Delete post"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              )}
             </div>
 
-            <p className="post-content">{post.content}</p>
+            <p className="post-text">{post.text}</p>
 
             <div className="post-stats">
               <Link to={`/post/${post._id}`}>
-                {post.comments.length} comments
+                {post.comments?.length || 0} comments
               </Link>
-              <span>{post.likes} likes</span>
+              <span>{post.countUp?.length || 0} likes</span>
             </div>
           </div>
         ))}
       </div>
+      
+        
+      {editingPost && (
+        <EditPostModal
+          isOpen={!!editingPost}
+          onClose={() => setEditingPost(null)}
+          post={editingPost}
+          onUpdate={handleUpdate}
+        />
+      )}
 
       {error && <div className="error-message">{error}</div>}
+      {posts.length === 0 && !isLoading && (
+        <div className="no-posts">No posts yet for this topic</div>
+      )}
     </div>
   );
 };
