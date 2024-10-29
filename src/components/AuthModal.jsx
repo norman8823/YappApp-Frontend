@@ -1,26 +1,75 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "../styles/AuthModal.css";
+import { signinWithGoogle } from "../services/authService";
+import axios from "axios";
+
+const BASE_URL =
+  import.meta.env.VITE_EXPRESS_BACKEND_URL || "http://localhost:3000";
 
 const AuthModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const { signin } = useAuth();
-  const [isSignUp, setIsSignUp] = useState(false);
 
+  const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
-
-  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
+  // Google Sign-In
+  useEffect(() => {
+    if (isOpen && window.google) {
+      window.google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID, // Ensure this is set in Vite's .env
+        callback: handleGoogleResponse,
+      });
+      window.google.accounts.id.renderButton(
+        document.getElementById("google-signin-button"),
+        { theme: "outline", size: "large" }
+      );
+    }
+  }, [isOpen]); // Runs when isOpen changes
+  // Effect runs only once on component mount
+
+  // Google Sign-In
+  const handleGoogleResponse = async (response) => {
+    setIsLoading(true);
+    setError("");
+    try {
+      // Check if response.credential is valid
+      if (!response.credential) {
+        throw new Error("No credential received from Google");
+      }
+
+      // Send Google ID token to backend
+      const googleUser = { token: response.credential };
+
+      const backendResponse = await axios.post(
+        `${BASE_URL}/auth/google/callback`,
+        googleUser
+      );
+
+      // Assuming backend returns the token directly
+      localStorage.setItem("token", backendResponse.data.token); // Store the token
+      onClose();
+      navigate("/landing");
+    } catch (err) {
+      console.error("Google Sign-In error:", err);
+      setError(err.message || "Google authentication failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Regular sign-in form submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
-
     try {
       await signin(formData);
       onClose();
@@ -33,11 +82,13 @@ const AuthModal = ({ isOpen, onClose }) => {
     }
   };
 
+  // Toggle to Sign-Up page
   const handleSignUpClick = () => {
-    onClose(); // Close the modal first
-    navigate("/signup"); // Then navigate to signup page
+    onClose();
+    navigate("/signup");
   };
 
+  // Return null if modal is closed
   if (!isOpen) return null;
 
   return (
@@ -93,8 +144,12 @@ const AuthModal = ({ isOpen, onClose }) => {
             Need an account? Sign up
           </button>
         </form>
+
+        {/* Google Sign-In Button */}
+        <div id="google-signin-button" className="google-signin"></div>
       </div>
     </div>
   );
 };
+
 export default AuthModal;
