@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import * as authService from '../services/authService';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import * as authService from "../services/authService";
 
 const AuthContext = createContext(null);
 
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
       setUser(user);
       return user;
     } catch (error) {
-      console.error('Signin error:', error);
+      console.error("Signin error:", error);
       throw error;
     }
   };
@@ -31,19 +31,30 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authService.signup(userData);
       if (response.token) {
-        localStorage.setItem('token', response.token);
+        localStorage.setItem("token", response.token);
         const user = authService.getUser(); // Parse the token to get user info
         setUser(user); // Set the user in context
         return response;
       }
-      throw new Error('Signup failed');
+      throw new Error("Signup failed");
     } catch (error) {
-      console.error('Signup error:', error);
+      console.error("Signup error:", error);
       throw error;
     }
   };
 
-  // Add signout function
+  const googleSignin = async (token) => {
+    try {
+      const response = await authService.googleSignin(token); // Adjust service call as necessary
+      const user = response.user; // Assuming response contains user data
+      setUser(user);
+      return user;
+    } catch (error) {
+      console.error("Google Signin error:", error);
+      throw error;
+    }
+  };
+
   const signout = () => {
     authService.signout();
     setUser(null);
@@ -53,32 +64,23 @@ export const AuthProvider = ({ children }) => {
     user,
     signin,
     signup,
+    googleSignin, // Include Google sign-in in context
     signout,
     isLoading,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
   };
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  return (
-    <AuthContext.Provider value={{
-      user,
-      signup,
-      signin,
-      signout,
-      isAuthenticated: !!user
-    }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
