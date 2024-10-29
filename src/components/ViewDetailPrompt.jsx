@@ -2,21 +2,21 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import * as postService from "../services/postService";
-import { Pencil, Trash2 } from 'lucide-react';
-import EditPostModal from './EditPostModal';
+import { Pencil, Trash2 } from "lucide-react";
+import EditPostModal from "./EditPostModal";
 import "../styles/ViewDetailPrompt.css";
 
 const ViewDetailPrompt = () => {
   const { promptId } = useParams();
   const [posts, setPosts] = useState([]);
-  const [promptTitle, setPromptTitle] = useState('')
-  const [error, setError] = useState('');
+  const [promptTitle, setPromptTitle] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const currentPrompt = location.state?.prompt;
-  const [ editingPost, setEditingPost ] = useState(null);
+  const [editingPost, setEditingPost] = useState(null);
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -33,7 +33,8 @@ const ViewDetailPrompt = () => {
     loadPosts();
   }, [promptId]);
 
-  console.log(location.state)
+  console.log(location.state);
+  console.log(posts);
 
   const handleEdit = (post) => {
     setEditingPost(post);
@@ -42,24 +43,26 @@ const ViewDetailPrompt = () => {
   const handleUpdate = async (newText) => {
     try {
       const updatedPost = await postService.updatePost(editingPost._id, {
-        text: newText
+        text: newText,
       });
-      setPosts(posts.map(post =>
-        post._id === editingPost._id ? { ...post, text:newText } : post
-      ));
+      setPosts(
+        posts.map((post) =>
+          post._id === editingPost._id ? { ...post, text: newText } : post
+        )
+      );
       setEditingPost(null);
     } catch (err) {
-      throw new Error('Failed to update');
+      throw new Error("Failed to update");
     }
   };
 
   const handleDelete = async (postId) => {
-    if (window.confirm('Are you sure you want to delete this post?')) {
+    if (window.confirm("Are you sure you want to delete this post?")) {
       try {
         await postService.deletePost(postId);
-        setPosts(posts.filter(post => post._id !== postId));
+        setPosts(posts.filter((post) => post._id !== postId));
       } catch (err) {
-        setError('Failed to delete post');
+        setError("Failed to delete post");
       }
     }
   };
@@ -97,9 +100,11 @@ const ViewDetailPrompt = () => {
                   alt="avatar"
                   className="owner-avatar"
                 />
-                <span>{post.owner.username}</span>
+                <span>
+                  {!post.owner.usename ? post.owner.username : post.owner.email}
+                </span>
               </div>
-              
+
               {user && post.owner._id === user._id && (
                 <div className="post-actions">
                   <button

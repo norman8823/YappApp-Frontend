@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import * as postService from '../services/postService';
-import '../styles/CreatePost.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import * as postService from "../services/postService";
+import "../styles/CreatePost.css";
 
 const CreatePost = () => {
-  const [text, setText] = useState('');
-  const [error, setError] = useState('');
+  const [text, setText] = useState("");
+  const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -15,54 +15,58 @@ const CreatePost = () => {
   const currentPrompt = location.state?.prompt;
 
   useEffect(() => {
-    console.log('Current user:', user);
-    console.log('Prompt ID:', promptId);
-    console.log('Current prompt:', currentPrompt);
-    
-    if (!promptId || promptId === 'undefined') {
-      navigate('/landing');
+    console.log("Current user:", user);
+    console.log("Prompt ID:", promptId);
+    console.log("Current prompt:", currentPrompt);
+
+    if (!promptId || promptId === "undefined") {
+      navigate("/landing");
     }
   }, [promptId, navigate]); // Added proper dependencies
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!text.trim()) {
-      setError('Post content cannot be empty');
+      setError("Post content cannot be empty");
       return;
     }
 
     setIsSubmitting(true);
-    setError('');
-    
+    setError("");
+
     try {
-      console.log('Creating post with:', {
+      console.log("Creating post with:", {
         owner: user._id,
+        // need to fix the Google one so it has _id instead of id
         prompt: promptId,
-        text: text.trim()
+        text: text.trim(),
       });
 
       const newPost = await postService.createPost({
         owner: user._id,
         prompt: promptId,
-        text: text.trim()
+        text: text.trim(),
       });
 
       navigate(`/prompt/${promptId}`, {
-        state: { prompt: currentPrompt }
+        state: { prompt: currentPrompt },
       });
-      
     } catch (err) {
-      console.error('Post creation error:', err);
-      setError(err.message || 'Failed to create post');
+      console.error("Post creation error:", err);
+      setError(err.message || "Failed to create post");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  console.log(user);
+
   // Add check for required data
   if (!user || !promptId) {
-    return <div className="error-message">Missing required data to create post</div>;
+    return (
+      <div className="error-message">Missing required data to create post</div>
+    );
   }
 
   return (
@@ -74,7 +78,7 @@ const CreatePost = () => {
 
       <div className="post-form-container">
         <div className="user-info">
-          <img 
+          <img
             src="/img/placeholderavatar.png"
             alt="avatar"
             className="user-avatar"
@@ -94,12 +98,12 @@ const CreatePost = () => {
 
           {error && <div className="error-message">{error}</div>}
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="post-button"
             disabled={isSubmitting || !text.trim()}
           >
-            {isSubmitting ? 'Posting...' : 'Post'}
+            {isSubmitting ? "Posting..." : "Post"}
           </button>
         </form>
       </div>
