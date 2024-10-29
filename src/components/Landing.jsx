@@ -68,6 +68,7 @@ const Landing = () => {
             key={prompt._id} 
             to={`/prompt/${prompt._id}`}
             className="prompt-bubble-container"
+            state={{ prompt: prompt }}
             onClick={() => setCurrentPrompt(prompt)}
           >
             <div className="prompt-bubble">

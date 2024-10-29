@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import * as postService from "../services/postService";
 import { Pencil, Trash2 } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
 import "../styles/ViewDetailPrompt.css";
 
 const ViewDetailPrompt = () => {
   const { promptId } = useParams();
   const [posts, setPosts] = useState([]);
+  const [promptTitle, setPromptTitle] = useState('')
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const prompt = location.state?.prompt;
+  const currentPrompt = location.state?.prompt;
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -30,6 +30,8 @@ const ViewDetailPrompt = () => {
 
     loadPosts();
   }, [promptId]);
+
+  console.log(location.state)
 
   const handleEdit = (postId) => {
     navigate(`/post/${postId}/edit`);
@@ -50,9 +52,9 @@ const ViewDetailPrompt = () => {
 
   return (
     <div className="prompt-container">
-      <div className="prompt-header">
-        <h1 className="prompt-title">
-          {location.state?.prompt?.title}</h1>
+      <div className="header-section">
+        <h1 className="prompt-title">Today's Topic</h1>
+        {currentPrompt && <p className="prompt-text">{currentPrompt.title}</p>}
       </div>
 
       <div className="posts-feed">
@@ -68,7 +70,6 @@ const ViewDetailPrompt = () => {
                 <span>{post.owner.username}</span>
               </div>
               
-              {/* Show edit/delete buttons only if current user is post owner */}
               {user && post.owner._id === user._id && (
                 <div className="post-actions">
                   <button
@@ -102,6 +103,9 @@ const ViewDetailPrompt = () => {
       </div>
 
       {error && <div className="error-message">{error}</div>}
+      {posts.length === 0 && !isLoading && (
+        <div className="no-posts">No posts yet for this topic</div>
+      )}
     </div>
   );
 };

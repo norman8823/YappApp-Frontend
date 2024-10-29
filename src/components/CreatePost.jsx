@@ -48,7 +48,10 @@ const CreatePost = () => {
         text: text.trim()
       });
 
-      navigate(`/prompt/${promptId}`);
+      navigate(`/prompt/${promptId}`, {
+        state: { prompt: currentPrompt }
+      });
+      
     } catch (err) {
       console.error('Post creation error:', err);
       setError(err.message || 'Failed to create post');

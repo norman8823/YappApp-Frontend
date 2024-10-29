@@ -118,6 +118,22 @@
   text-align: center;
 }
 
+.header-section {
+  background-color: #FFE4C4;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.prompt-text {
+  background: white;
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin: 10px 0;
+}
+
 @media (max-width: 768px) {
   .prompt-container {
     padding: 10px;
