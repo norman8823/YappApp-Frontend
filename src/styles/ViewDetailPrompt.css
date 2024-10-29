@@ -134,6 +134,56 @@
   margin: 10px 0;
 }
 
+.post-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Make sure action buttons don't trigger the hover effect */
+.post-actions {
+  position: relative;
+  z-index: 2;
+}
+
+.edit-button,
+.delete-button {
+  cursor: pointer;
+}
+
+/* Remove the Link styles from post stats since the whole card is clickable */
+.post-stats {
+  display: flex;
+  justify-content: space-between;
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+/* Add loading state */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+/* Add empty state */
+.no-posts {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
 @media (max-width: 768px) {
   .prompt-container {
     padding: 10px;

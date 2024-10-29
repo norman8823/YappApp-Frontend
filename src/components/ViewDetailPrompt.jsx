@@ -66,6 +66,12 @@ const ViewDetailPrompt = () => {
 
   if (isLoading) return <div className="loading">Loading posts...</div>;
 
+  const handlePostClick = (postId) => {
+    navigate(`/post/${postId}`, {
+      state: { prompt: location.state?.prompt }  
+    });
+  };
+
   return (
     <div className="prompt-container">
       <div className="header-section">
@@ -75,7 +81,15 @@ const ViewDetailPrompt = () => {
 
       <div className="posts-feed">
         {posts.map((post) => (
-          <div key={post._id} className="post-card">
+          <div 
+            key={post._id} 
+            className="post-card"
+            onClick={(e) => {
+              if (!e.target.closest('.post-actions')) {
+                handlePostClick(post._id);
+              }
+            }}
+          >
             <div className="post-header">
               <div className="post-owner">
                 <img
@@ -89,14 +103,20 @@ const ViewDetailPrompt = () => {
               {user && post.owner._id === user._id && (
                 <div className="post-actions">
                   <button
-                    onClick={() => handleEdit(post)}
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent post click
+                      handleEdit(post);
+                    }}
                     className="edit-button"
                     title="Edit post"
                   >
                     <Pencil size={16} />
                   </button>
                   <button
-                    onClick={() => handleDelete(post._id)}
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent post click
+                      handleDelete(post._id);
+                    }}
                     className="delete-button"
                     title="Delete post"
                   >
@@ -109,16 +129,13 @@ const ViewDetailPrompt = () => {
             <p className="post-text">{post.text}</p>
 
             <div className="post-stats">
-              <Link to={`/post/${post._id}`}>
-                {post.comments?.length || 0} comments
-              </Link>
+              <span>{post.comments?.length || 0} comments</span>
               <span>{post.countUp?.length || 0} likes</span>
             </div>
           </div>
         ))}
       </div>
-      
-        
+
       {editingPost && (
         <EditPostModal
           isOpen={!!editingPost}
@@ -129,9 +146,6 @@ const ViewDetailPrompt = () => {
       )}
 
       {error && <div className="error-message">{error}</div>}
-      {posts.length === 0 && !isLoading && (
-        <div className="no-posts">No posts yet for this topic</div>
-      )}
     </div>
   );
 };
