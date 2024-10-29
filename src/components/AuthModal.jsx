@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "../styles/AuthModal.css";
-import { signinWithGoogle } from "../services/authService";
 import axios from "axios";
 
 const BASE_URL =
@@ -12,7 +11,6 @@ const AuthModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const { signin } = useAuth();
 
-  const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -32,8 +30,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         { theme: "outline", size: "large" }
       );
     }
-  }, [isOpen]); // Runs when isOpen changes
-  // Effect runs only once on component mount
+  }, [isOpen]);
 
   // Google Sign-In
   const handleGoogleResponse = async (response) => {
@@ -56,7 +53,7 @@ const AuthModal = ({ isOpen, onClose }) => {
       // Assuming backend returns the token directly
       localStorage.setItem("token", backendResponse.data.token); // Store the token
       onClose();
-      navigate("/landing");
+      window.location.reload();
     } catch (err) {
       console.error("Google Sign-In error:", err);
       setError(err.message || "Google authentication failed");
