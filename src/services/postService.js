@@ -19,7 +19,7 @@ export const getPostsByPrompt = async (promptId) => {
   }
 };
 
-export const getPostById = async (postId) => {  // renamed from 'show' to match backend
+export const getPostById = async (postId) => {  
   try {
     const response = await fetch(`${BASE_URL}/posts/${postId}`, {
       headers: {
