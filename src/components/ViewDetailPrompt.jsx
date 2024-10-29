@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import * as postService from "../services/postService";
 import { Pencil, Trash2 } from 'lucide-react';
+import EditPostModal from './EditPostModal';
 import "../styles/ViewDetailPrompt.css";
 
 const ViewDetailPrompt = () => {
@@ -15,6 +16,7 @@ const ViewDetailPrompt = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPrompt = location.state?.prompt;
+  const [ editingPost, setEditingPost ] = useState(null);
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -33,8 +35,22 @@ const ViewDetailPrompt = () => {
 
   console.log(location.state)
 
-  const handleEdit = (postId) => {
-    navigate(`/post/${postId}/edit`);
+  const handleEdit = (post) => {
+    setEditingPost(post);
+  };
+
+  const handleUpdate = async (newText) => {
+    try {
+      const updatedPost = await postService.updatePost(editingPost._id, {
+        text: newText
+      });
+      setPosts(posts.map(post =>
+        post._id === editingPost._id ? { ...post, text:newText } : post
+      ));
+      setEditingPost(null);
+    } catch (err) {
+      throw new Error('Failed to update');
+    }
   };
 
   const handleDelete = async (postId) => {
@@ -73,7 +89,7 @@ const ViewDetailPrompt = () => {
               {user && post.owner._id === user._id && (
                 <div className="post-actions">
                   <button
-                    onClick={() => handleEdit(post._id)}
+                    onClick={() => handleEdit(post)}
                     className="edit-button"
                     title="Edit post"
                   >
@@ -101,6 +117,16 @@ const ViewDetailPrompt = () => {
           </div>
         ))}
       </div>
+      
+        
+      {editingPost && (
+        <EditPostModal
+          isOpen={!!editingPost}
+          onClose={() => setEditingPost(null)}
+          post={editingPost}
+          onUpdate={handleUpdate}
+        />
+      )}
 
       {error && <div className="error-message">{error}</div>}
       {posts.length === 0 && !isLoading && (
