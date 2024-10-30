@@ -1,21 +1,28 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext'; // Import useAuth
-import NavBar from './components/NavBar';
-import HomePage from './components/HomePage';
-import SignUp from './components/SignUp';
-import Landing from './components/Landing';
-import CreatePost from './components/CreatePost';
-import UpdatePost from './components/UpdatePost';
-import ViewDetailPost from './components/ViewDetailPost';
-import ViewDetailTopic from './components/ViewDetailPrompt';
-import UserProfile from './components/UserProfile';
-import SignIn from './components/SignIn';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider, useAuth } from "./contexts/AuthContext"; // Import useAuth
+import NavBar from "./components/NavBar";
+import HomePage from "./components/HomePage";
+import SignUp from "./components/SignUp";
+import Landing from "./components/Landing";
+import CreatePost from "./components/CreatePost";
+import UpdatePost from "./components/UpdatePost";
+import ViewDetailPost from "./components/ViewDetailPost";
+import ViewDetailTopic from "./components/ViewDetailPrompt";
+import UserProfile from "./components/UserProfile";
+import SignIn from "./components/SignIn";
+import Team from "./components/Team";
+import Footer from "./components/Footer";
 
 // Move ProtectedRoute inside a separate component to use hooks properly
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
-  
+
   if (!user) {
     return <Navigate to="/" replace />;
   }
@@ -24,6 +31,7 @@ const ProtectedRoute = ({ children }) => {
     <>
       <NavBar />
       {children}
+      <Footer />
     </>
   );
 };
@@ -55,15 +63,15 @@ const App = () => {
                   <ViewDetailTopic />
                 </ProtectedRoute>
               }
-              />
-              <Route 
-              path="/prompt/:promptId/create" 
+            />
+            <Route
+              path="/prompt/:promptId/create"
               element={
                 <ProtectedRoute>
                   <CreatePost />
                 </ProtectedRoute>
-              } 
-            />   
+              }
+            />
             <Route
               path="/post/create"
               element={
@@ -93,6 +101,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <UserProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/team"
+              element={
+                <ProtectedRoute>
+                  <Team />
                 </ProtectedRoute>
               }
             />
