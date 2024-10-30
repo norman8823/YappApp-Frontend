@@ -9,21 +9,25 @@ const ViewDetailPost = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
+  const [vote, setVote] = useState({})
   const [newComment, setNewComment] = useState("");
   const [error, setError] = useState("");
+  const [toggle, setToggle] = useState(false)
 
   useEffect(() => {
     const loadPost = async () => {
       try {
         const data = await postService.getPostById(postId);
+        const voteData = await postService.getVote(postId);
         setPost(data);
+        setVote(voteData)
       } catch (err) {
         setError("Failed to load post");
       }
     };
 
     loadPost();
-  }, [postId]);
+  }, [postId, toggle]);
 
   const handleAddComment = async (e) => {
     e.preventDefault();
@@ -41,15 +45,11 @@ const ViewDetailPost = () => {
     }
   };
 
-  const handleLike = async (type) => {
+  const handleLike = async (voteType) => {
     try {
       // Implement like/dislike functionality
-      const response = await postService.likePost(postId, type);
-      setPost((prevPost) => ({
-        ...prevPost,
-        likes: response.likes,
-        dislikes: response.dislikes,
-      }));
+      await postService.likePost(postId, {voteType});
+      setToggle(prev => !prev)
     } catch (err) {
       setError("Failed to update like");
     }
@@ -62,6 +62,22 @@ const ViewDetailPost = () => {
   };
 
   if (!post) return <div className="error-message"> Post Not Found</div>;
+
+  const upvoteClass = () => {
+    if (vote?.type === "upvote" && vote?.type !== null){
+      return "highlight-vote"
+    } else {
+      return ""
+    }
+  }
+
+  const downvoteClass = () => {
+    if (vote?.type === "downvote" && vote?.type !== null){
+      return "highlight-vote"
+    } else {
+      return ""
+    }
+  }
 
   return (
     <div className="post-detail-container">
@@ -84,14 +100,14 @@ const ViewDetailPost = () => {
         <div className="post-meta">
           <div className="post-actions">
             <div className="like-buttons">
-              <button onClick={() => handleLike("like")} className="like-btn">
-                👍 {post.countUp?.length || 0}
+              <button onClick={() => handleLike("upvote")} className={`like-btn ${upvoteClass()}`}>
+                👍 {post.voteCounts?.upvotes}
               </button>
               <button
-                onClick={() => handleLike("dislike")}
-                className="dislike-btn"
+                onClick={() => handleLike("downvote")}
+                className={`dislike-btn ${downvoteClass()}`}
               >
-                👎 {post.countDown?.length || 0}
+                👎 {post.voteCounts?.downvotes}
               </button>
             </div>
           </div>
