@@ -3,6 +3,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import * as postService from "../services/postService";
 import "../styles/CreatePost.css";
+import { useSocket } from "../contexts/SocketContex";
 
 const CreatePost = () => {
   const [text, setText] = useState("");
@@ -13,6 +14,7 @@ const CreatePost = () => {
   const { promptId } = useParams(); // Get the current prompt ID from URL
   const location = useLocation();
   const currentPrompt = location.state?.prompt;
+  const socket = useSocket();
 
   useEffect(() => {
     console.log("Current user:", user);
@@ -38,7 +40,6 @@ const CreatePost = () => {
     try {
       console.log("Creating post with:", {
         owner: user._id,
-        // need to fix the Google one so it has _id instead of id
         prompt: promptId,
         text: text.trim(),
       });
@@ -52,6 +53,7 @@ const CreatePost = () => {
       navigate(`/prompt/${promptId}`, {
         state: { prompt: currentPrompt },
       });
+      socket.emit("new-post", newPost);
     } catch (err) {
       console.error("Post creation error:", err);
       setError(err.message || "Failed to create post");
