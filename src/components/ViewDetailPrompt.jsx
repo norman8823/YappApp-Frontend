@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import * as postService from "../services/postService";
 import { Pencil, Trash2 } from "lucide-react";
-// import EditPostModal from "./EditPostModal";
+import EditPostModal from "./EditPostModal";
 import "../styles/ViewDetailPrompt.css";
 
 const ViewDetailPrompt = () => {
@@ -16,7 +16,7 @@ const ViewDetailPrompt = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPrompt = location.state?.prompt;
-  // const [editingPost, setEditingPost] = useState(null);
+  const [editingPost, setEditingPost] = useState(null);
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -36,36 +36,36 @@ const ViewDetailPrompt = () => {
   console.log(location.state);
   console.log(posts);
 
-  // const handleEdit = (post) => {
-  //   setEditingPost(post);
-  // };
+  const handleEdit = (post) => {
+    setEditingPost(post);
+  };
 
-  // const handleUpdate = async (newText) => {
-  //   try {
-  //     const updatedPost = await postService.updatePost(editingPost._id, {
-  //       text: newText,
-  //     });
-  //     setPosts(
-  //       posts.map((post) =>
-  //         post._id === editingPost._id ? { ...post, text: newText } : post
-  //       )
-  //     );
-  //     setEditingPost(null);
-  //   } catch (err) {
-  //     throw new Error("Failed to update");
-  //   }
-  // };
+  const handleUpdate = async (newText) => {
+    try {
+      const updatedPost = await postService.updatePost(editingPost._id, {
+        text: newText,
+      });
+      setPosts(
+        posts.map((post) =>
+          post._id === editingPost._id ? { ...post, text: newText } : post
+        )
+      );
+      setEditingPost(null);
+    } catch (err) {
+      throw new Error("Failed to update");
+    }
+  };
 
-  // const handleDelete = async (postId) => {
-  //   if (window.confirm("Are you sure you want to delete this post?")) {
-  //     try {
-  //       await postService.deletePost(postId);
-  //       setPosts(posts.filter((post) => post._id !== postId));
-  //     } catch (err) {
-  //       setError("Failed to delete post");
-  //     }
-  //   }
-  // };
+  const handleDelete = async (postId) => {
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      try {
+        await postService.deletePost(postId);
+        setPosts(posts.filter((post) => post._id !== postId));
+      } catch (err) {
+        setError("Failed to delete post");
+      }
+    }
+  };
 
   if (isLoading) return <div className="loading">Loading posts...</div>;
 
@@ -101,8 +101,8 @@ const ViewDetailPrompt = () => {
                   {!post.owner.usename ? post.owner.username : post.owner.email}
                 </span>
               </div>
-            </div>
-          {/* {user && post.owner._id === user._id && (
+         
+          {user && post.owner._id === user._id && (
                 <div className="post-actions">
                   <button
                     onClick={(e) => {
@@ -126,26 +126,27 @@ const ViewDetailPrompt = () => {
                   </button>
                 </div>
               )}
-            </div> */}
+            </div>
 
             <p className="post-text">{post.text}</p>
 
             <div className="post-stats">
               <span>{post.comments?.length || 0} comments</span>
               <span>{post.countUp?.length || 0} likes</span>
-            </div>
           </div>
+        </div>
         ))}
       </div>
+      
 
-      // {/* {editingPost && (
-      //   <EditPostModal
-      //     isOpen={!!editingPost}
-      //     onClose={() => setEditingPost(null)}
-      //     post={editingPost}
-      //     onUpdate={handleUpdate}
-      //   />
-      // )} */}
+       {editingPost && (
+        <EditPostModal
+          isOpen={!!editingPost}
+          onClose={() => setEditingPost(null)}
+          post={editingPost}
+          onUpdate={handleUpdate}
+        />
+      )}
 
       {error && <div className="error-message">{error}</div>}
     </div>

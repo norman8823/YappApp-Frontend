@@ -83,13 +83,19 @@
     background: #f0f0f0;
     padding: 15px;
     border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
   }
   
+  .comment-content {
+    display: flex;
+    align-items: flex-start;
+  }
+
   .comment-author {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
   }
   
   .error-message {
@@ -126,10 +132,11 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 12px;
     position: relative;
+    width: 100%;
+    justify-content: flex-start;
   }
-  
+
   .post-actions {
     display: flex;
     gap: 8px;
@@ -144,7 +151,7 @@
     cursor: pointer;
     border-radius: 4px;
     display: flex;
-    align-items: center;
+    align-items: right;
     justify-content: center;
     transition: background-color 0.2s;
   }

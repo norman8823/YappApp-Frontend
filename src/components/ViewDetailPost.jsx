@@ -118,6 +118,13 @@ const ViewDetailPost = () => {
 
   if (!post) return <div className="error-message"> Post Not Found</div>;
 
+  console.log({
+    'User exists': !!user,
+    'User ID': user?._id,
+    'Post owner ID': post?.owner?._id,
+    'Do IDs match?': user?._id === post?.owner?._id
+  });
+
   return (
     <div className="post-detail-container">
       <div className="post-header">
@@ -126,12 +133,14 @@ const ViewDetailPost = () => {
 
   <div className="post-text">
     <div className="post-owner">
+      <div className="user-info">
      <img
       src="/img/placeholderavatar.png"
       alt="avatar"
       className="owner-avatar"
     />
       <span>{post.owner.username}</span>
+      </div>
     
     {user && post.owner._id === user._id && (
       <div className="post-actions">
@@ -197,6 +206,15 @@ const ViewDetailPost = () => {
                 <span>{comment.owner.username}</span>
               </div>
               <p className="comment-text">{comment.text}</p>
+              {user && comment.owner._id === user._id && (
+                <button
+                  onClick={() => handleDeleteComment(comment._id)}
+                  className="delete-button"
+                  title="Delete comment"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+              )}
             </div>
           ))}
         </div>
