@@ -132,7 +132,8 @@ const ViewDetailPrompt = () => {
 
             <div className="post-stats">
               <span>{post.comments?.length || 0} comments</span>
-              <span>{post.countUp?.length || 0} likes</span>
+              <span>{post.voteCounts?.upvotes} Likes</span>
+              <span>{post.voteCounts?.downvotes} Dislikes</span>
           </div>
         </div>
         ))}
