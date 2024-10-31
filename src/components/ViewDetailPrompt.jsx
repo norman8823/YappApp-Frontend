@@ -71,7 +71,7 @@ const ViewDetailPrompt = () => {
 
   const handlePostClick = (postId) => {
     navigate(`/post/${postId}`, {
-      state: { prompt: location.state?.prompt }  
+      state: { prompt: location.state?.prompt },
     });
   };
 
@@ -84,11 +84,10 @@ const ViewDetailPrompt = () => {
 
       <div className="posts-feed">
         {posts.map((post) => (
-          <div 
-            key={post._id} 
+          <div
+            key={post._id}
             className="post-card"
-            onClick={() =>
-                handlePostClick(post._id)}
+            onClick={() => handlePostClick(post._id)}
           >
             <div className="post-header">
               <div className="post-owner">
@@ -101,8 +100,8 @@ const ViewDetailPrompt = () => {
                   {!post.owner.usename ? post.owner.username : post.owner.email}
                 </span>
               </div>
-         
-          {user && post.owner._id === user._id && (
+
+              {user && post.owner._id === user._id && (
                 <div className="post-actions">
                   <button
                     onClick={(e) => {
@@ -131,16 +130,18 @@ const ViewDetailPrompt = () => {
             <p className="post-text">{post.text}</p>
 
             <div className="post-stats">
-              <span>{post.comments?.length || 0} comments</span>
+              <span>
+                {post.commentLength}{" "}
+                {post.commentLength !== 1 ? "comments" : "comment"}
+              </span>
               <span>{post.voteCounts?.upvotes} Likes</span>
               <span>{post.voteCounts?.downvotes} Dislikes</span>
+            </div>
           </div>
-        </div>
         ))}
       </div>
-      
 
-       {editingPost && (
+      {editingPost && (
         <EditPostModal
           isOpen={!!editingPost}
           onClose={() => setEditingPost(null)}
