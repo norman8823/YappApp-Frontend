@@ -6,6 +6,7 @@ import { useAuth } from "../contexts/AuthContext";
 const EditProfile = () => {
   const navigate = useNavigate();
   const { user, updateUser } = useAuth();
+  const isGoogleUser = Boolean(user?.googleId)
 
   const [formData, setFormData] = useState({
     username: user?.username || "",
@@ -58,7 +59,7 @@ const EditProfile = () => {
         return;
       }
 
-      const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/users/profile`, {
+      const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/users/${user.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -86,6 +87,10 @@ const EditProfile = () => {
     <div className="signup-container">
       <h2>Edit Profile</h2>
 
+      {isGoogleUser && (
+        <p className="text-sm text-gray-500 mb-4">Logged in with Google</p>
+      )}
+
       <div className="avatar-selector">
         <img
           src="/img/placeholderavatar.png"
@@ -111,7 +116,12 @@ const EditProfile = () => {
               setFormData({ ...formData, username: e.target.value })
             }
             required
+            disabled={isGoogleUser}
+            className={isGoogleUser ? "bg-gray-100" : ""}
           />
+          {isGoogleUser && (
+            <small className="text-gray-500">Cannot change username when logged in with Google</small>
+          )}
         </div>
 
         <div className="form-group">
@@ -125,46 +135,48 @@ const EditProfile = () => {
             required
           />
         </div>
+        
+        {!isGoogleUser && (
+          <div className="password-section">
+            <h3>Change Password</h3>
+            <p className="password-note">Leave blank to keep current password</p>
 
-        <div className="password-section">
-          <h3>Change Password</h3>
-          <p className="password-note">Leave blank to keep current password</p>
+            <div className="form-group">
+              <label>Current Password</label>
+              <input
+                type="password"
+                value={formData.currentPassword}
+                onChange={(e) =>
+                  setFormData({ ...formData, currentPassword: e.target.value })
+                }
+              />
+            </div>
 
-          <div className="form-group">
-            <label>Current Password</label>
-            <input
-              type="password"
-              value={formData.currentPassword}
-              onChange={(e) =>
-                setFormData({ ...formData, currentPassword: e.target.value })
-              }
-            />
+            <div className="form-group">
+              <label>New Password</label>
+              <input
+                type="password"
+                value={formData.newPassword}
+                onChange={(e) =>
+                  setFormData({ ...formData, newPassword: e.target.value })
+                }
+                disabled={!formData.currentPassword}
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Confirm New Password</label>
+              <input
+                type="password"
+                value={formData.confirmNewPassword}
+                onChange={(e) =>
+                  setFormData({ ...formData, confirmNewPassword: e.target.value })
+                }
+                disabled={!formData.currentPassword}
+              />
+            </div>
           </div>
-
-          <div className="form-group">
-            <label>New Password</label>
-            <input
-              type="password"
-              value={formData.newPassword}
-              onChange={(e) =>
-                setFormData({ ...formData, newPassword: e.target.value })
-              }
-              disabled={!formData.currentPassword}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Confirm New Password</label>
-            <input
-              type="password"
-              value={formData.confirmNewPassword}
-              onChange={(e) =>
-                setFormData({ ...formData, confirmNewPassword: e.target.value })
-              }
-              disabled={!formData.currentPassword}
-            />
-          </div>
-        </div>
+        )}
 
         <div className="form-actions">
           <button 
