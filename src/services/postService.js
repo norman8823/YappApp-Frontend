@@ -124,3 +124,39 @@ export const deletePost = async (postId) => {
   }
 };
 
+// PUT "/posts/:postId/vote", add header for token, pass voteType in body of request
+export const likePost = async (postId, voteType) => {
+  try {
+    const response = await fetch(`${BASE_URL}/posts/${postId}/vote`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify(voteType)
+    });
+    if (!response.ok) {
+      throw new Error('Failed to update post');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error liking/disliking post:', error);
+    throw error;
+  }
+}
+
+export const getVote = async (postId) => {
+  try {
+    const response = await fetch(`${BASE_URL}/posts/${postId}/vote`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    return response.json()
+  } catch (error) {
+    console.error('Error viewing vote:', error);
+    throw error;
+  }
+}
