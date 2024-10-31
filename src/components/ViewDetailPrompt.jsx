@@ -78,7 +78,7 @@ const ViewDetailPrompt = () => {
   return (
     <div className="prompt-container">
       <div className="header-section">
-        <h1 className="prompt-title">Today's Topic</h1>
+        <h1 className="prompt-title">Yapp About It:</h1>
         {currentPrompt && <p className="prompt-text">{currentPrompt.prompt}</p>}
       </div>
 
