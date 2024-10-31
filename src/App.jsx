@@ -13,7 +13,7 @@ import Landing from "./components/Landing";
 import CreatePost from "./components/CreatePost";
 import UpdatePost from "./components/UpdatePost";
 import ViewDetailPost from "./components/ViewDetailPost";
-import ViewDetailTopic from "./components/ViewDetailPrompt";
+import ViewDetailPrompt from "./components/ViewDetailPrompt";
 import UserProfile from "./components/UserProfile";
 import SignIn from "./components/SignIn";
 import Team from "./components/Team";
@@ -60,7 +60,7 @@ const App = () => {
               path="/prompt/:promptId"
               element={
                 <ProtectedRoute>
-                  <ViewDetailTopic />
+                  <ViewDetailPrompt />
                 </ProtectedRoute>
               }
             />
