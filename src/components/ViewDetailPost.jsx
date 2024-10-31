@@ -1,5 +1,4 @@
-//viewDetailPost.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import * as postService from "../services/postService";
@@ -13,28 +12,31 @@ const ViewDetailPost = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
+  const [vote, setVote] = useState({})
   const [newComment, setNewComment] = useState("");
   const [error, setError] = useState("");
+  const [toggle, setToggle] = useState(false)
   const [editingPost, setEditingPost] = useState(null);
 
   useEffect(() => {
     const loadPost = async () => {
       try {
         const data = await postService.getPostById(postId);
+        const voteData = await postService.getVote(postId);
         setPost(data);
+        setVote(voteData)
       } catch (err) {
         setError("Failed to load post");
       }
     };
-
     loadPost();
-  }, [postId]);
+  }, [postId, toggle])
 
   const handleAddComment = async (e) => {
     e.preventDefault();
 
     if (!newComment.trim()) {
-      setError("Comment cannot be empty");
+      setError('Comment cannot be empty');
       return;
     }
 
@@ -52,20 +54,20 @@ const ViewDetailPost = () => {
         comments: [...prevPost.comments, data],
       }));
 
-      setNewComment("");
+      setNewComment('');
     } catch (err) {
-      console.error("Comment error:", err);
-      setError("Failed to add comment");
+      console.error('Comment error:', err);
+      setError('Failed to add comment');
     }
   };
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this post?")) {
+    if (window.confirm('Are you sure you want to delete this post?')) {
       try {
         await postService.deletePost(postId);
         navigate("/landing");
       } catch (err) {
-        setError("Failed to delete post");
+        setError('Failed to delete post');
       }
     }
   };
@@ -78,7 +80,7 @@ const ViewDetailPost = () => {
         comments: prevPost.comments.filter((c) => c._id !== commentId),
       }));
     } catch (err) {
-      setError("Failed to delete comment");
+      setError('Failed to delete comment');
     }
   };
 
@@ -92,24 +94,43 @@ const ViewDetailPost = () => {
         text: newText,
       }));
     } catch (err) {
-      throw new Error("Failed to update");
+      throw new Error('Failed to update');
     }
   };
 
-  const handleLike = async (type) => {
+  const handleLike = async (voteType) => {
     try {
-      const response = await postService.likePost(postId, type);
-      setPost((prevPost) => ({
-        ...prevPost,
-        likes: response.likes,
-        dislikes: response.dislikes,
-      }));
+      // Implement like/dislike functionality
+      await postService.likePost(postId, {voteType});
+      setToggle(prev => !prev)
     } catch (err) {
       setError("Failed to update like");
     }
   };
 
-  if (!post) return <div className="error-message">Post Not Found</div>;
+  const handleShare = () => {
+    // Implement share functionality
+    navigator.clipboard.writeText(window.location.href);
+    // Show success message
+  };
+
+  if (!post) return <div className="error-message"> Post Not Found</div>;
+
+  const upvoteClass = () => {
+    if (vote?.type === "upvote" && vote?.type !== null){
+      return "highlight-vote"
+    } else {
+      return ""
+    }
+  }
+
+  const downvoteClass = () => {
+    if (vote?.type === "downvote" && vote?.type !== null){
+      return "highlight-vote"
+    } else {
+      return ""
+    }
+  }
 
   return (
     <div className="post-detail-container">
@@ -150,16 +171,18 @@ const ViewDetailPost = () => {
         <p className="post-text">{post.text}</p>
 
         <div className="post-meta">
-          <div className="like-buttons">
-            <button onClick={() => handleLike("like")} className="like-btn">
-              👍 {post.countUp?.length || 0}
-            </button>
-            <button
-              onClick={() => handleLike("dislike")}
-              className="dislike-btn"
-            >
-              👎 {post.countDown?.length || 0}
-            </button>
+          <div className="post-actions">
+            <div className="like-buttons">
+              <button onClick={() => handleLike("upvote")} className={`like-btn ${upvoteClass()}`}>
+                👍 {post.voteCounts?.upvotes}
+              </button>
+              <button
+                onClick={() => handleLike("downvote")}
+                className={`dislike-btn ${downvoteClass()}`}
+              >
+                👎 {post.voteCounts?.downvotes}
+              </button>
+            </div>
           </div>
           <span>Posted {new Date(post.createdAt).toLocaleDateString()}</span>
         </div>
@@ -180,7 +203,7 @@ const ViewDetailPost = () => {
         </form>
 
         <div className="comments-list">
-          {post.comments.map((comment) => (
+        {post.comments.map((comment) => (
             <div key={comment._id} className="comment">
               <div className="comment-owner">
                 <div className="owner-info">

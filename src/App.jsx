@@ -18,7 +18,8 @@ import UserProfile from "./components/UserProfile";
 import SignIn from "./components/SignIn";
 import Team from "./components/Team";
 import Footer from "./components/Footer";
-import EditProfile from "./components/EditProfile"
+import EditProfile from "./components/EditProfile";
+import FAQ from "./components/FAQ";
 
 // Move ProtectedRoute inside a separate component to use hooks properly
 const ProtectedRoute = ({ children }) => {
@@ -118,6 +119,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Team />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/FAQ"
+              element={
+                <ProtectedRoute>
+                  <FAQ />
                 </ProtectedRoute>
               }
             />
