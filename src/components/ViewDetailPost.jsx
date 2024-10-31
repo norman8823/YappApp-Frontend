@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import * as postService from "../services/postService";
-import * as commentService from "../services/commentService.js"
+import * as commentService from "../services/commentService.js";
 import "../styles/ViewDetailPost.css";
-import EditPostModal from '../components/EditPostModal';
+import EditPostModal from "../components/EditPostModal";
 import { Pencil, Trash2 } from "lucide-react";
 
 const ViewDetailPost = () => {
@@ -65,7 +65,7 @@ const ViewDetailPost = () => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
         await postService.deletePost(postId);
-        navigate('/landing');
+        navigate("/landing");
       } catch (err) {
         setError('Failed to delete post');
       }

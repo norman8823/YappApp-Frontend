@@ -1,5 +1,5 @@
 .profile-container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
   }
@@ -37,7 +37,7 @@
   
   .post-card {
     background-color: #f0f0f0;
-    padding: 15px;
+    padding: 10px;
     margin-bottom: 15px;
     border-radius: 8px;
   }

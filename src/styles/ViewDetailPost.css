@@ -22,7 +22,7 @@
   
   .post-actions {
     display: flex;
-    gap: 20px;
+    gap: 10px;
   }
   
   .like-buttons {
@@ -64,6 +64,11 @@
     border-radius: 20px;
   }
   
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
   .comment-btn {
     background-color: #f97316;
     color: white;
@@ -84,20 +89,38 @@
     padding: 15px;
     border-radius: 8px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
   }
   
-  .comment-content {
+  .comment-text {
+    width: 100%;
+    max-width: 800px;
     display: flex;
+    justify-content: space-between;
     align-items: flex-start;
+    text-align: left;
   }
 
-  .comment-author {
+  .comment-owner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%
+  }
+
+  .comment-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+  
+  .owner-info {
     display: flex;
     align-items: center;
   }
-  
+
   .error-message {
     background-color: #fee2e2;
     color: #ef4444;
@@ -130,17 +153,14 @@
 
   .post-owner {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 8px;
-    position: relative;
     width: 100%;
-    justify-content: flex-start;
   }
 
   .post-actions {
     display: flex;
-    gap: 8px;
-    margin-left: auto;
+    gap: 0.5rem;
   }
   
   .edit-button,
@@ -152,10 +172,25 @@
     border-radius: 4px;
     display: flex;
     align-items: right;
-    justify-content: center;
+    margin-left: 1rem;
     transition: background-color 0.2s;
   }
   
+  .deletecomment-button {
+    background: none;
+    border:none;
+    padding: 4px;
+    cursor: pointer;
+    align-items: right;
+    margin-left: 1rem;
+    transition: background-color 0.2s;
+  }
+
+  .deletecomment-button:hover {
+    background-color: #fee2e2;
+    color: #dc2626;
+  }
+
   .edit-button:hover {
     background-color: #f0f0f0;
   }
@@ -166,10 +201,11 @@
   }
   
   .owner-avatar {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     object-fit: cover;
+    margin-right: 0.5rem;
   }
   
   .post-meta {
