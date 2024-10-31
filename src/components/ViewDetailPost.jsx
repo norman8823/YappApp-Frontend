@@ -3,9 +3,9 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import * as postService from "../services/postService";
-import * as commentService from "../services/commentService.js"
+import * as commentService from "../services/commentService.js";
 import "../styles/ViewDetailPost.css";
-import EditPostModal from '../components/EditPostModal';
+import EditPostModal from "../components/EditPostModal";
 import { Pencil, Trash2 } from "lucide-react";
 
 const ViewDetailPost = () => {
@@ -16,7 +16,6 @@ const ViewDetailPost = () => {
   const [newComment, setNewComment] = useState("");
   const [error, setError] = useState("");
   const [editingPost, setEditingPost] = useState(null);
-
 
   useEffect(() => {
     const loadPost = async () => {
@@ -33,11 +32,12 @@ const ViewDetailPost = () => {
 
   const handleAddComment = async (e) => {
     e.preventDefault();
-  
+
     if (!newComment.trim()) {
       setError("Comment cannot be empty");
       return;
     }
+
     try {
       const data = await commentService.createComment({
         owner: user._id,
@@ -45,7 +45,7 @@ const ViewDetailPost = () => {
         text: newComment.trim(),
       });
 
-      console.log(data)
+      console.log(data);
 
       setPost((prevPost) => ({
         ...prevPost,
@@ -54,7 +54,7 @@ const ViewDetailPost = () => {
 
       setNewComment("");
     } catch (err) {
-      console.error('Comment error:', err)
+      console.error("Comment error:", err);
       setError("Failed to add comment");
     }
   };
@@ -63,19 +63,19 @@ const ViewDetailPost = () => {
     if (window.confirm("Are you sure you want to delete this post?")) {
       try {
         await postService.deletePost(postId);
-        navigate('/landing');
+        navigate("/landing");
       } catch (err) {
         setError("Failed to delete post");
       }
     }
   };
 
-  const handleDeleteComment = async (commentId) => {
+  const handleCommentDelete = async (commentId) => {
     try {
       await commentService.deleteComment(commentId);
-      setPost(prevPost => ({
+      setPost((prevPost) => ({
         ...prevPost,
-        comments: prevPost.comments.filter(c => c._id !== commentId)
+        comments: prevPost.comments.filter((c) => c._id !== commentId),
       }));
     } catch (err) {
       setError("Failed to delete comment");
@@ -87,9 +87,9 @@ const ViewDetailPost = () => {
       const updatedPost = await postService.updatePost(postId, {
         text: newText,
       });
-      setPost(prevPost => ({
+      setPost((prevPost) => ({
         ...prevPost,
-        text: newText
+        text: newText,
       }));
     } catch (err) {
       throw new Error("Failed to update");
@@ -98,7 +98,6 @@ const ViewDetailPost = () => {
 
   const handleLike = async (type) => {
     try {
-
       const response = await postService.likePost(postId, type);
       setPost((prevPost) => ({
         ...prevPost,
@@ -110,20 +109,7 @@ const ViewDetailPost = () => {
     }
   };
 
-  const handleShare = () => {
-
-    navigator.clipboard.writeText(window.location.href);
-
-  };
-
-  if (!post) return <div className="error-message"> Post Not Found</div>;
-
-  console.log({
-    'User exists': !!user,
-    'User ID': user?._id,
-    'Post owner ID': post?.owner?._id,
-    'Do IDs match?': user?._id === post?.owner?._id
-  });
+  if (!post) return <div className="error-message">Post Not Found</div>;
 
   return (
     <div className="post-detail-container">
@@ -131,54 +117,53 @@ const ViewDetailPost = () => {
         <h1 className="topic-title">{post.prompt?.title || "Topic"}</h1>
       </div>
 
-  <div className="post-text">
-    <div className="post-owner">
-      <div className="user-info">
-     <img
-      src="/img/placeholderavatar.png"
-      alt="avatar"
-      className="owner-avatar"
-    />
-      <span>{post.owner.username}</span>
-      </div>
-    
-    {user && post.owner._id === user._id && (
-      <div className="post-actions">
-        <button
-          onClick={() => {setEditingPost(post)}}
-          className="edit-button"
-          title="Edit post"
-        >
-          <Pencil size={16} />
-        </button>
-        <button
-          onClick={handleDelete}
-          className="delete-button"
-          title="Delete post"
-        >
-          <Trash2 size={16} />
-        </button>
-      </div>
-    )}
-  </div>
+      <div className="post-text">
+        <div className="post-owner">
+          <div className="user-info">
+            <img
+              src="/img/placeholderavatar.png"
+              alt="avatar"
+              className="owner-avatar"
+            />
+            <span>{post.owner.username}</span>
+          </div>
+          {user && post.owner._id === user._id && (
+            <div className="post-actions">
+              <button
+                onClick={() => setEditingPost(post)}
+                className="edit-button"
+                title="Edit post"
+              >
+                <Pencil size={16} />
+              </button>
+              <button
+                onClick={handleDelete}
+                className="delete-button"
+                title="Delete post"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          )}
+        </div>
 
-  <p className="post-text">{post.text}</p>
+        <p className="post-text">{post.text}</p>
 
-  <div className="post-meta">
-    <div className="like-buttons">
-      <button onClick={() => handleLike("like")} className="like-btn">
-        👍 {post.countUp?.length || 0}
-      </button>
-      <button
-        onClick={() => handleLike("dislike")}
-        className="dislike-btn"
-      >
-        👎 {post.countDown?.length || 0}
-      </button>
-    </div>
-    <span>Posted {new Date(post.createdAt).toLocaleDateString()}</span>
-  </div>
-</div>
+        <div className="post-meta">
+          <div className="like-buttons">
+            <button onClick={() => handleLike("like")} className="like-btn">
+              👍 {post.countUp?.length || 0}
+            </button>
+            <button
+              onClick={() => handleLike("dislike")}
+              className="dislike-btn"
+            >
+              👎 {post.countDown?.length || 0}
+            </button>
+          </div>
+          <span>Posted {new Date(post.createdAt).toLocaleDateString()}</span>
+        </div>
+      </div>
 
       <div className="comments-section">
         <form onSubmit={handleAddComment} className="comment-form">
@@ -198,23 +183,28 @@ const ViewDetailPost = () => {
           {post.comments.map((comment) => (
             <div key={comment._id} className="comment">
               <div className="comment-owner">
-                <img
-                  src="/img/placeholderavatar.png"
-                  alt="avatar"
-                  className="owner-avatar"
-                />
-                <span>{comment.owner.username}</span>
+                <div className="owner-info">
+                  <img
+                    src="/img/placeholderavatar.png"
+                    alt="avatar"
+                    className="owner-avatar"
+                  />
+                  <span>{comment.owner.username}</span>
+                </div>
+                {user && comment.owner._id === user._id && (
+                  <div className="comment-actions">
+                    <button
+                      onClick={() => handleCommentDelete(comment._id)}
+                      className="deletecomment-button"
+                      title="Delete comment"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                )}
               </div>
+
               <p className="comment-text">{comment.text}</p>
-              {user && comment.owner._id === user._id && (
-                <button
-                  onClick={() => handleDeleteComment(comment._id)}
-                  className="delete-button"
-                  title="Delete comment"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-              )}
             </div>
           ))}
         </div>

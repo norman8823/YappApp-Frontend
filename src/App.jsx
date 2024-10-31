@@ -18,6 +18,7 @@ import UserProfile from "./components/UserProfile";
 import SignIn from "./components/SignIn";
 import Team from "./components/Team";
 import Footer from "./components/Footer";
+import EditProfile from "./components/EditProfile"
 
 // Move ProtectedRoute inside a separate component to use hooks properly
 const ProtectedRoute = ({ children }) => {
@@ -101,6 +102,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <UserProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/edit"
+              element={
+                <ProtectedRoute>
+                  <EditProfile />
                 </ProtectedRoute>
               }
             />
