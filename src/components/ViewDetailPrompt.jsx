@@ -97,7 +97,7 @@ const ViewDetailPrompt = () => {
                   className="owner-avatar"
                 />
                 <span>
-                  {!post.owner.usename ? post.owner.username : post.owner.email}
+                  {post.owner.username ? post.owner.username : post.owner.email}
                 </span>
               </div>
 

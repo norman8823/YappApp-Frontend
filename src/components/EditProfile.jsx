@@ -1,22 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-// import "../styles/EditProfile.css";
+import { updateUserProfile } from "../services/profileService";
+import "../styles/EditProfile.css";
 
 const EditProfile = () => {
   const navigate = useNavigate();
   const { user, updateUser } = useAuth();
-  const isGoogleUser = Boolean(user?.googleId)
+  const isGoogleUser = Boolean(user?.googleId);
+
+  console.log('Initial user data:', user);
 
   const [formData, setFormData] = useState({
-    username: user?.username || "",
-    email: user?.email || "",
+    username: "",
+    email: "",
     currentPassword: "",
     newPassword: "",
     confirmNewPassword: "",
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData(prevData => ({
+        ...prevData,
+        username: user.username || "",
+        email: user.email || "",
+      }));
+    }
+  }, [user]);
+
   const [avatar, setAvatar] = useState(user?.avatar || 0);
   const [error, setError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const validatePasswords = (newPass, confirmPass) => {
+    if (newPass && newPass !== confirmPass) {
+      setPasswordError("Passwords do not match");
+      return false;
+    }
+    setPasswordError("");
+    return true;
+  };
 
   const handleAvatarChange = (direction) => {
     if (direction === "next") {
@@ -26,62 +50,45 @@ const EditProfile = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
 
-    // Only validate passwords if user is trying to change password
-    if (formData.newPassword || formData.currentPassword) {
-      if (!formData.currentPassword) {
-        setError("Current password is required to set new password");
-        return;
-      }
-      if (formData.newPassword !== formData.confirmNewPassword) {
-        setError("New passwords do not match");
-        return;
-      }
+  // EditProfile.jsx - Simplify handleSubmit
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+  setPasswordError("");
+
+  if (formData.newPassword && !validatePasswords()) {
+    return;
+  }
+
+  console.log("Current user:", user);
+
+  try {
+    const updates = {};
+    if (formData.username !== user.username) updates.username = formData.username;
+    if (formData.email !== user.email) updates.email = formData.email;
+    if (avatar !== user.avatar) updates.avatar = avatar;
+    if (formData.newPassword) {
+      updates.currentPassword = formData.currentPassword;
+      updates.newPassword = formData.newPassword;
     }
 
-    try {
-      // Only include fields that have changed
-      const updates = {};
-      if (formData.username !== user.username) updates.username = formData.username;
-      if (formData.email !== user.email) updates.email = formData.email;
-      if (avatar !== user.avatar) updates.avatar = avatar;
-      if (formData.newPassword) {
-        updates.currentPassword = formData.currentPassword;
-        updates.newPassword = formData.newPassword;
-      }
-
-      // If no changes were made
-      if (Object.keys(updates).length === 0) {
-        setError("No changes to save");
-        return;
-      }
-
-      const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/users/${user.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(updates)
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to update profile');
-      }
-
-      // Update local user data and navigate back
-      updateUser(data.user);
-      navigate('/profile');
-
-    } catch (err) {
-      setError(err.message || "Failed to update profile");
+    if (Object.keys(updates).length === 0) {
+      setError("No changes to save");
+      return;
     }
-  };
+
+    console.log('Sending updates:', updates);
+    const data = await updateUserProfile(user._id, updates);
+    console.log('Received response:', data);
+
+    updateUser(data.user);
+    navigate("/profile");
+  } catch (err) {
+    console.error("Update error:", err);
+    setError(err.message || "Failed to update profile");
+  }
+};
 
   return (
     <div className="signup-container">
@@ -101,7 +108,7 @@ const EditProfile = () => {
           <button onClick={() => handleAvatarChange("prev")}>&lt;</button>
           <button onClick={() => handleAvatarChange("next")}>&gt;</button>
         </div>
-        <p>{user?.followers || 0} followers</p>
+        <h3 className="text-center mt-2">{user?.username}</h3> 
       </div>
 
       {error && <div className="error-message">{error}</div>}
@@ -120,7 +127,9 @@ const EditProfile = () => {
             className={isGoogleUser ? "bg-gray-100" : ""}
           />
           {isGoogleUser && (
-            <small className="text-gray-500">Cannot change username when logged in with Google</small>
+            <small className="text-gray-500">
+              Cannot change username when logged in with Google
+            </small>
           )}
         </div>
 
@@ -135,11 +144,13 @@ const EditProfile = () => {
             required
           />
         </div>
-        
+
         {!isGoogleUser && (
           <div className="password-section">
             <h3>Change Password</h3>
-            <p className="password-note">Leave blank to keep current password</p>
+            <p className="password-note">
+              Leave blank to keep current password
+            </p>
 
             <div className="form-group">
               <label>Current Password</label>
@@ -157,31 +168,36 @@ const EditProfile = () => {
               <input
                 type="password"
                 value={formData.newPassword}
-                onChange={(e) =>
-                  setFormData({ ...formData, newPassword: e.target.value })
-                }
+                onChange={(e) => {
+                  setFormData({ ...formData, newPassword: e.target.value });
+                  validatePasswords(); // Validate on change
+                }}
                 disabled={!formData.currentPassword}
               />
             </div>
+
 
             <div className="form-group">
               <label>Confirm New Password</label>
               <input
                 type="password"
                 value={formData.confirmNewPassword}
-                onChange={(e) =>
-                  setFormData({ ...formData, confirmNewPassword: e.target.value })
-                }
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  setFormData(prev => ({ ...prev, confirmNewPassword: newValue }));
+                  validatePasswords(formData.newPassword, newValue);
+                }}
                 disabled={!formData.currentPassword}
               />
             </div>
+            {passwordError && <div className="error-message">{passwordError}</div>} {/* Add this line */}
           </div>
         )}
 
         <div className="form-actions">
-          <button 
-            type="button" 
-            onClick={() => navigate('/profile')} 
+          <button
+            type="button"
+            onClick={() => navigate("/profile")}
             className="cancel-button"
           >
             Cancel

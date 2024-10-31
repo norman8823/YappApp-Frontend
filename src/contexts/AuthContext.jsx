@@ -60,12 +60,20 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const updateUser = (updatedUserData) => {
+    setUser(prevUser => ({
+      ...prevUser,
+      ...updatedUserData
+    }));
+  };
+
   const value = {
     user,
     signin,
     signup,
-    googleSignin, // Include Google sign-in in context
+    googleSignin,
     signout,
+    updateUser,
     isLoading,
     isAuthenticated: !!user,
   };
