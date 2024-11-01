@@ -80,7 +80,7 @@ const ViewDetailPrompt = () => {
     <div className="prompt-container">
       <div className="header-section">
         <h1 className="prompt-title">Today's Topic</h1>
-        {currentPrompt && <p className="prompt-text">{currentPrompt.title}</p>}
+        {currentPrompt && <p className="prompt-text">{currentPrompt.prompt}</p>}
       </div>
 
       <div className="posts-feed">
