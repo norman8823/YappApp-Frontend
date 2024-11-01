@@ -206,8 +206,8 @@ const ViewDetailPost = () => {
         </form>
 
         <div className="comments-list">
-          {post.comments.map((comment) => (
-            <div key={comment._id} className="comment">
+        {post.comments && post.comments.map((comment) => (
+          <div key={comment._id} className="comment">
               <div className="comment-owner">
                 <div className="owner-info">
                   <img
@@ -215,9 +215,9 @@ const ViewDetailPost = () => {
                     alt="avatar"
                     className="owner-avatar"
                   />
-                  <span>{comment.owner.username}</span>
+                  <span>{comment?.owner?.username || 'Anonymous'}</span>
                 </div>
-                {user && comment.owner._id === user._id && (
+                {user && comment?.owner?._id === user._id && (
                   <div className="comment-actions">
                     <button
                       onClick={() => handleCommentDelete(comment._id)}

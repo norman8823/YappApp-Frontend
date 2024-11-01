@@ -28,6 +28,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #FCDE9C;
+  font-family: sans-serif;
+  line-height: 1.6;
 }
 
 h1 {
@@ -54,7 +57,25 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: dark) {
+.container {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #FCDE9C;
+}
+
+/* Universal header styling */
+.header {
+  width: 100%;
+  background-color: #FFA552;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+
+@media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;

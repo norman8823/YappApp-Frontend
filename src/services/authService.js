@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const BASE_URL =
-  import.meta.env.VITE_EXPRESS_BACKEND_URL || "http://localhost:3000";
+  import.meta.env.VITE_BACK_END_SERVER_URL || "http://localhost:3000";
 
 export const signup = async (userData) => {
   try {

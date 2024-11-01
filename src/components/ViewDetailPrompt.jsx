@@ -87,7 +87,7 @@ const ViewDetailPrompt = () => {
         {posts.map((post) => (
           <div
             key={post._id}
-            className="post-card"
+            className="bubble bubble-bottom-left"
             onClick={() => handlePostClick(post._id)}
           >
             <div className="post-header">
