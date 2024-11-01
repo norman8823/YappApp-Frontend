@@ -1,62 +1,121 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { api } from '../services/api';
+import * as postService from '../services/postService';
 import '../styles/UserProfile.css';
 
 const UserProfile = () => {
-  const { currentUser, logout } = useAuth();
-  const [profile, setProfile] = useState(null);
+  const { user } = useAuth();
+  const [userPosts, setUserPosts] = useState([]);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const loadUserPosts = async () => {
       try {
-        const { user } = await api.profile.get(currentUser._id);
-        setProfile(user);
+        const response = await postService.getPosts();
+        const filteredPosts = response.filter(post => post?.owner?._id === user?._id);
+        setUserPosts(filteredPosts);
+        setError('');
       } catch (err) {
-        setError(err.message);
+        console.error('Error loading posts:', err);
+        setError('Failed to load your posts');
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    if (currentUser) {
-      fetchProfile();
+    if (user) {
+      loadUserPosts();
     }
-  }, [currentUser]);
+  }, [user]);
 
-  const handleUpdateUsername = async (newUsername) => {
-    try {
-      const { user } = await api.profile.updateUsername(currentUser._id, newUsername);
-      setProfile(user);
-    } catch (err) {
-      setError(err.message);
-    }
+  const handlePostClick = (postId) => {
+    navigate(`/post/${postId}`);
   };
 
-  if (!profile) {
-    return <div>Loading...</div>;
+  const handleEditProfile = () => {
+    navigate('/profile/edit');
+  };
+
+  if (!user) {
+    navigate('/login');
+    return null;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="loading-container">
+        <div className="loading">Loading your profile...</div>
+      </div>
+    );
   }
 
   return (
     <div className="profile-container">
-      <h1>User Profile</h1>
-      {error && <div className="error-message">{error}</div>}
-      <div className="profile-info">
-        <img src="/api/placeholder/100/100" alt="avatar" className="profile-avatar" />
-        <h2>{profile.username}</h2>
-        <p>{profile.followers} followers</p>
+      <div className="profile-header">
+        <img 
+          src={user.avatar || "/img/placeholderavatar.png"}
+          alt="Profile avatar"
+          className="profile-avatar"
+          onError={(e) => {
+            e.target.src = "/img/placeholderavatar.png";
+          }}
+        />
+        <div className="profile-info">
+          <h3>{user.username}</h3>
+          <p>{user.followers || 0} followers</p>
+          <button 
+            onClick={handleEditProfile}
+            className="edit-profile-button"
+          >
+            Edit Profile
+          </button>
+        </div>
       </div>
-      <div className="profile-actions">
-        <button onClick={() => navigate('/edit-profile')} className="edit-button">
-          Edit Profile
-        </button>
-        <button onClick={logout} className="logout-button">
-          Logout
-        </button>
+
+      <div className="user-posts">
+        <h2>Your Posts</h2>
+        
+        {error && (
+          <div className="error-message" role="alert">
+            {error}
+          </div>
+        )}
+        
+        {!error && userPosts.length === 0 ? (
+          <p className="no-posts">You haven't made any posts yet</p>
+        ) : (
+          <div className="posts-grid">
+            {userPosts.map(post => (
+              <div 
+                key={post._id} 
+                className="post-card"
+                onClick={() => handlePostClick(post._id)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handlePostClick(post._id);
+                  }
+                }}
+              >
+                <div className="post-content">
+                  <p className="post-text">{post.text}</p>
+                  <div className="post-footer">
+                    <span className="post-date">
+                      Posted {new Date(post.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export { SignUp, UserProfile };
+export default UserProfile;

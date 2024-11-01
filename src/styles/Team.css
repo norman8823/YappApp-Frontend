@@ -1,0 +1,64 @@
+.team-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.team-header {
+  background-color: #ffe4c4;
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.team-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #f97316;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.team-member {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  text-align: center;
+}
+
+.team-member:hover {
+  transform: scale(1.05);
+}
+
+.member-image {
+  width: 100px; /* Fixed size for images */
+  height: 100px;
+  border-radius: 8px; /* Soft curve on edges */
+  margin-bottom: 15px; /* Spacing below the image */
+  border: none; /* Remove border to match the theme */
+}
+
+.member-name {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #333; /* Dark text color */
+}
+
+.member-role {
+  font-size: 1rem;
+  color: #777; /* Lighter text for roles */
+  margin: 5px 0;
+}
+
+.member-bio {
+  font-size: 0.9rem;
+  color: #555; /* Medium gray for bio text */
+  margin-top: 10px;
+}
