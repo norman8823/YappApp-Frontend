@@ -22,6 +22,7 @@ const ViewDetailPrompt = () => {
     const loadPosts = async () => {
       try {
         const fetchedPosts = await postService.getPostsByPrompt(promptId);
+
         setPosts(fetchedPosts);
       } catch (err) {
         setError("Failed to load posts");
@@ -97,11 +98,13 @@ const ViewDetailPrompt = () => {
                   className="owner-avatar"
                 />
                 <span>
-                  {!post.owner.usename ? post.owner.username : post.owner.email}
+                  {post.owner
+                    ? post.owner.username || post.owner.email
+                    : "Unknown User"}
                 </span>
               </div>
 
-              {user && post.owner._id === user._id && (
+              {user && post.owner === user._id && (
                 <div className="post-actions">
                   <button
                     onClick={(e) => {

@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Flame } from "lucide-react";
-import axios from "axios"; // Importing axios
+import axios from "axios";
 import "../styles/Landing.css";
+import * as postService from "../services/postService";
 
 const Landing = () => {
   const navigate = useNavigate();
-  const [currentPrompt, setCurrentPrompt] = useState({
-    _id: "65f38b998428a2d7c37c2750",
-    prompt: "Trump or Kamala",
-    isHot: false,
-  });
-
+  const [currentPrompt, setCurrentPrompt] = useState(null); // Changed to null initially
   const [prompts, setPrompts] = useState([]);
+  const [userPosts, setUserPosts] = useState([]); // State to track user posts
 
   // Function to fetch today's and previous prompts
   const fetchPrompts = async () => {
@@ -29,6 +26,12 @@ const Landing = () => {
 
       // Assuming previous prompts is an array of prompt objects
       setPrompts(previousResponse.data);
+
+      // Fetch user posts (You might need to implement this endpoint)
+      const userPostsResponse = await axios.get(
+        `${import.meta.env.VITE_BACK_END_SERVER_URL}/posts` // Adjust this URL as needed
+      );
+      setUserPosts(userPostsResponse.data); // Set user posts
     } catch (error) {
       console.error("Error fetching prompts:", error);
     }
@@ -37,6 +40,10 @@ const Landing = () => {
   useEffect(() => {
     fetchPrompts();
   }, []);
+
+  const hasUserPostedToday = () => {
+    return userPosts.some((post) => post.promptId === currentPrompt?._id); // Check if user has posted today's prompt
+  };
 
   const handleCreatePost = () => {
     navigate(`/prompt/${currentPrompt._id}/create`, {
@@ -49,11 +56,29 @@ const Landing = () => {
       <div className="header-section">
         <div className="prompt-header">
           <h3 className="prompt-of-day">Today's Topic</h3>
-          <div className="current-prompt-bubble">{currentPrompt.prompt}</div>
+          {currentPrompt && hasUserPostedToday() ? (
+            <>
+              <div className="current-prompt-bubble">
+                {currentPrompt.prompt}
+              </div>
+              <button
+                onClick={() => navigate(`/prompt/${currentPrompt._id}/yaps`)}
+                className="view-yaps-button"
+              >
+                View Yaps
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="no-prompt-message">
+                Yap to see today's prompt!
+              </div>
+              <button onClick={handleCreatePost} className="yap-button">
+                Yap
+              </button>
+            </>
+          )}
         </div>
-        <button onClick={handleCreatePost} className="yap-button">
-          Yap
-        </button>
       </div>
 
       <div className="prompts-section">
