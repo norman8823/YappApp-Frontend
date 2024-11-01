@@ -45,7 +45,7 @@ const getHeaders = () => {
   export const updateUserProfile = async (userId, updates) => {
     try {
       const token = localStorage.getItem('token');
-      const url = `${BASE_URL}/api/users/${userId}`;
+      const url = `${BASE_URL}/users/${userId}`;
       
       console.log('Making request to:', url);
       console.log('With updates:', updates);

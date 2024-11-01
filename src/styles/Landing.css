@@ -1,18 +1,20 @@
 .landing-container {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
+  background-color: #FCDE9C;
+  border: 1px solid rgba(0, 0, 0, 0.25);
 }
 
 .header-section {
-  background-color: #FFE4C4;
-  padding: 40px 20px;
-  text-align: center;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  background-color: #f1bb79;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 8px;
+  margin: -20px -20px 20px -20px;
+  padding: 40px 20px;
 }
 
 .prompt-header {
@@ -41,6 +43,7 @@
   background-color: #f97316;
   color: white;
   border: none;
+  margin-top: 20px;
   padding: 12px 36px;
   border-radius: 20px;
   cursor: pointer;
@@ -51,17 +54,20 @@
 
 .yap-button:hover {
   background-color: #ea580c;
+  animation: shake 1s ease-in-out;
+  animation-fill-mode: forwards;
 }
 
 .prompts-section {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  padding: 0 20px;
 }
 
 .prompt-bubble-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;  
   gap: 10px;
   text-decoration: none;
   color: inherit;
@@ -89,4 +95,127 @@
   border-radius: 20px;
   margin: 10px 0;
   display: inline-block;
+}
+
+p.bubble {
+  position: relative;
+  width: auto; /* Allow width to be determined by content */
+  min-width: 200px; /* Minimum width for very short content */
+  max-width: 800px; /* Maximum width for very long content */
+  text-align: left;
+  line-height: 1.4em;
+  margin: 20px auto;
+  background-color: #fff;
+  border: 6px solid #333;
+  border-radius: 20px;
+  font-family: sans-serif;
+  font-weight: 700;
+  padding: 20px;
+  font-size: large;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+p.bubble:hover {
+  animation: float 3s ease-in-out infinite;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+p.thought {
+  width: auto; /* Allow width to be determined by content */
+  min-width: 200px; /* Minimum width for very short content */
+  max-width: 800px; /* Maximum width for very long content */
+  border-radius: 50px;
+  padding: 20px;  
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  word-wrap: break-word; /* Ensure long words don't overflow */
+}
+
+p.thought:hover {
+  animation: float 3s ease-in-out infinite;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Update the bubble decorations to follow the bubble */
+p.thought:before,
+p.thought:after {
+  left: 10px;
+  bottom: -30px;
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border: 6px solid #333;
+  border-radius: 28px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+p.thought:after {
+  width: 20px;
+  height: 20px;
+  left: 5px;
+  bottom: -40px;
+  border-radius: 18px;
+}
+
+/* Speech bubble arrow styles */
+p.speech:before {
+  left: 30px;
+  bottom: -50px;
+  border: 25px solid;
+  border-color: #333 transparent transparent #333;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.1));
+}
+
+p.speech:after {
+  left: 38px;
+  bottom: -30px;
+  border: 15px solid;
+  border-color: #fff transparent transparent #fff;
+}
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-5px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(-5px) rotate(1deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes shake {
+  0% { transform: scale(1.2) rotate(0deg); }
+  25% { transform: scale(1.2) rotate(-5deg); }
+  50% { transform: scale(1.2) rotate(0deg); }
+  75% { transform: scale(1.2) rotate(5deg); }
+  100% { transform: scale(1.2) rotate(0deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .landing-container {
+    padding: 10px;
+    max-width: 95%;
+  }
+
+  .header-section {
+    margin: -10px -10px 20px -10px;
+    padding: 30px 15px;
+  }
+
+  p.bubble,
+  p.thought {
+    max-width: 90vw;
+    margin: 20px auto;
+    font-size: 16px;
+  }
 }

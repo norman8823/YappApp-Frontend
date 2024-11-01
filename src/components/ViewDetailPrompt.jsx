@@ -77,7 +77,7 @@ const ViewDetailPrompt = () => {
   };
 
   return (
-    <div className="prompt-container">
+    <div className="page-container">
       <div className="header-section">
         <h1 className="prompt-title">Today's Topic</h1>
         {currentPrompt && <p className="prompt-text">{currentPrompt.prompt}</p>}
@@ -87,49 +87,48 @@ const ViewDetailPrompt = () => {
         {posts.map((post) => (
           <div
             key={post._id}
-            className="post-card"
+            className="bubble bubble-bottom-left"
             onClick={() => handlePostClick(post._id)}
           >
-            <div className="post-header">
-              <div className="post-owner">
-                <img
-                  src="/img/placeholderavatar.png"
-                  alt="avatar"
-                  className="owner-avatar"
-                />
-                <span>
-                  {post.owner
-                    ? post.owner.username || post.owner.email
-                    : "Unknown User"}
-                </span>
-              </div>
-
-              {user && post.owner === user._id && (
-                <div className="post-actions">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent post click
-                      handleEdit(post);
-                    }}
-                    className="edit-button"
-                    title="Edit post"
-                  >
-                    <Pencil size={16} />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent post click
-                      handleDelete(post._id);
-                    }}
-                    className="delete-button"
-                    title="Delete post"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              )}
-            </div>
-
+      <div className="post-header">
+  <div className="post-owner">
+    <div className="owner-info">
+      <img
+        src="/img/placeholderavatar.png"
+        alt="avatar"
+        className="owner-avatar"
+      />
+      <span>
+        {post.owner.username || "Unknown User"}
+      </span>
+    </div>
+    
+    {user && post.owner._id === user._id && (
+      <div className="post-actions">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleEdit(post);
+          }}
+          className="edit-button"
+          title="Edit post"
+        >
+          <Pencil size={16} />
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(post._id);
+          }}
+          className="delete-button"
+          title="Delete post"
+        >
+          <Trash2 size={16} />
+        </button>
+      </div>
+    )}
+  </div>
+</div>
             <p className="post-text">{post.text}</p>
 
             <div className="post-stats">

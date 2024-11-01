@@ -26,7 +26,7 @@
   
   .nav-button {
     padding: 0.5rem 1rem;
-    border-radius: 9999px;
+    border-radius: 99px;
     cursor: pointer;
     border: none;
   }
@@ -41,12 +41,19 @@
   }
   
   .secondary-button {
-    background-color: #e5e7eb;
-    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
   }
   
   .secondary-button:hover {
-    background-color: #d1d5db;
+    background-color: #13121210;
   }
 
   .logout-button {

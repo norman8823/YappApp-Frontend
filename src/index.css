@@ -24,10 +24,48 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  padding: 0;
+  /* display: flex;
+  place-items: center; */
   min-width: 320px;
   min-height: 100vh;
+  background-color: #FFF9E5;
+}
+
+/* Universal page layout */
+.page-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #FCDE9C;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+/* Universal header styling */
+.header-section {
+  background-color: #ffe4c4;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
+  margin: -20px -20px 20px -20px;
+  padding: 40px 20px;
+}
+
+/* Header content wrapper */
+.header-content {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Main content section */
+.content-section {
+  width: 100%;
+  padding: 0 20px;
 }
 
 h1 {
@@ -47,20 +85,20 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #13121233;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: #037269;
   }
   button {
     background-color: #f9f9f9;
