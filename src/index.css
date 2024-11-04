@@ -29,6 +29,7 @@ body {
   place-items: center; */
   min-width: 320px;
   min-height: 100vh;
+
   background-color: #FFF9E5;
 }
 
@@ -65,7 +66,7 @@ body {
 /* Main content section */
 .content-section {
   width: 100%;
-  padding: 0 20px;
+  padding: 0 20px;                     
 }
 
 h1 {
@@ -90,6 +91,16 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+
+
+.container {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #FCDE9C;
 }
 
 @media (prefers-color-scheme: light) {

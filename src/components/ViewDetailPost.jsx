@@ -196,7 +196,6 @@ const ViewDetailPost = () => {
             <span>Posted {new Date(post.createdAt).toLocaleDateString()}</span>
           </div>
         </div>
-
         <div className="comments-section">
           <form onSubmit={handleAddComment} className="comment-form">
             <input
@@ -222,6 +221,7 @@ const ViewDetailPost = () => {
                       className="owner-avatar"
                     />
                     <span>{comment.owner.username}</span>
+
                   </div>
                   {user && comment.owner._id === user._id && (
                     <div className="comment-actions">
