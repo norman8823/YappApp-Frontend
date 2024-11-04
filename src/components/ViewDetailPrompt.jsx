@@ -79,7 +79,9 @@ const ViewDetailPrompt = () => {
   return (
     <div className="page-container">
       <div className="header-section">
-        <h1 className="prompt-title">Today's Topic</h1>
+        <h1 className="prompt-title">
+        {currentPrompt?.isToday ? "Today's Topic" : "Past Topic"}
+          </h1>
         {currentPrompt && <p className="prompt-text">{currentPrompt.prompt}</p>}
       </div>
 

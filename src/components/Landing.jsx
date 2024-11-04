@@ -90,7 +90,7 @@ const Landing = () => {
       state={{ prompt: prompt }}
       onClick={() => setCurrentPrompt(prompt)}
     >
-      <p className="bubble thought">
+      <p class="bubble thought">
         {prompt.prompt}
       </p>
       {prompt.isHot && (

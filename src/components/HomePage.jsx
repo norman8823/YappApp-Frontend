@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Flame, MessageCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import AuthModal from './AuthModal';
+import Footer from './Footer';
 import '../styles/HomePage.css';
 
 const HomePage = () => {
@@ -49,6 +50,7 @@ const HomePage = () => {
   }, [user, navigate]);
   
   return (
+    <div className="page-wrapper">
     <div className="page-container">
       <div className="header-section">
         <div className="header-content">
@@ -97,6 +99,8 @@ const HomePage = () => {
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
       />
+    </div>
+    <Footer />
     </div>
   );
 };

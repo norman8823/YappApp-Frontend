@@ -103,7 +103,7 @@ const CreatePost = () => {
             className="post-button"
             disabled={isSubmitting || !text.trim()}
           >
-            {isSubmitting ? "Posting..." : "Post"}
+            {isSubmitting ? "Posting..." : "Yap"}
           </button>
         </form>
       </div>

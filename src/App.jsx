@@ -48,6 +48,8 @@ const App = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/FAQ" element={<FAQ />} />
 
             {/* Protected routes */}
             <Route
@@ -114,7 +116,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            <Route
+            {/* <Route
               path="/team"
               element={
                 <ProtectedRoute>
@@ -128,7 +130,7 @@ const App = () => {
                 <ProtectedRoute>
                   <FAQ />
                 </ProtectedRoute>
-              }
+              } */}
             />
           </Routes>
         </div>

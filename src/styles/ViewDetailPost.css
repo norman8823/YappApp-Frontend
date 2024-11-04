@@ -1,9 +1,23 @@
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
 .post-detail-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    background-color: #fcde9c;
+    border: 1px solid rgba(0, 0, 0, 0.25);
   }
   
+.prompt-recap {
+  font-size: 1.4rem
+}
+
   .post-content {
     background: #f0f0f0;
     padding: 20px;
@@ -81,9 +95,10 @@
   .comments-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    align-items: flex-end;
+    gap: 20px;
   }
-  
+
   .comment {
     background: #f0f0f0;
     padding: 15px;
@@ -94,9 +109,49 @@
     align-items: flex-start;
   }
   
+  body {
+    padding: 20px;
+    font-family: Helvetica;
+  }
+  
+  .commentbubble {
+    position: relative;
+    display: inline-block;
+    padding: 10px 10px;
+    width: fit-content;
+    max-width: 500px;
+    background-color: lightblue;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin-left:auto;
+    margin-bottom: 10px;
+  }
+  
+  .commentbubble:before {
+    content: "";
+    position: absolute;
+    padding: 7px 15px;
+    bottom: -14px;
+    right: -2px;
+    background-color: lightblue;
+    border-bottom-left-radius: 30px 20px;
+  }
+  
+  .commentbubble:after {
+    content: "";
+    position: absolute;
+    padding: 7px 15px;
+    bottom: -14px;
+    right: -12px;
+    background-color: #fcde9c;
+    border-bottom-left-radius: 30px 20px;
+  }
+
   .comment-text {
     width: 100%;
-    max-width: 800px;
+    margin:5px;
+    max-width: 600px;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -106,7 +161,7 @@
   .comment-owner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: left;
     width: 100%
   }
 
@@ -119,6 +174,7 @@
   .owner-info {
     display: flex;
     align-items: center;
+    gap: 2px;
   }
 
   .error-message {
@@ -138,11 +194,7 @@
     margin-bottom: 20px;
   }
   
-  .prompt-title {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
-  
+
   .prompt-text {
     background: white;
     display: inline-block;
@@ -205,7 +257,7 @@
     height: 30px;
     border-radius: 50%;
     object-fit: cover;
-    margin-right: 0.5rem;
+    margin-right: 0.25rem;
   }
   
   .post-meta {
@@ -220,3 +272,36 @@
     display: flex;
     gap: 8px;
   }
+
+  .post-bubble {
+    position: relative;
+    font-family: sans-serif;
+    font-size: 18px;
+    line-height: 24px;
+    width: fit-content;
+    min-width: 100px;
+    max-width: 700px;
+    background: #fff;
+    border-radius: 40px;
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 10px;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+  
+  .post-bubble-bottom-left:before {
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-left: 24px solid #fff;
+    border-right: 12px solid transparent;
+    border-top: 12px solid #fff;
+    border-bottom: 20px solid transparent;
+    left: 32px;
+    bottom: -24px;
+  }
+  

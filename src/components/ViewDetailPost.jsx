@@ -134,10 +134,11 @@ const ViewDetailPost = () => {
 
   return (
     <div className="post-detail-container">
+      <div className="post-main-container">
       <div className="post-header">
-        <h1 className="topic-title">{post.prompt?.prompt || "Topic"}</h1>
+        <h1 className="prompt-recap">{post.prompt?.prompt || "Topic"}</h1>
       </div>
-
+      <div className="post-bubble post-bubble-tail">
       <div className="post-text">
         <div className="post-owner">
           <div className="user-info">
@@ -168,8 +169,12 @@ const ViewDetailPost = () => {
           )}
         </div>
 
-        <p className="post-text">{post.text}</p>
 
+        <p className="post-text">{post.text}</p>
+        </div>
+      </div>
+
+      <div className="post-interaction-container">
         <div className="post-meta">
           <div className="post-actions">
             <div className="like-buttons">
@@ -207,7 +212,7 @@ const ViewDetailPost = () => {
 
         <div className="comments-list">
           {post.comments.map((comment) => (
-            <div key={comment._id} className="comment">
+            <div key={comment._id} className="commentbubble">
               <div className="comment-owner">
                 <div className="owner-info">
                   <img
@@ -235,7 +240,8 @@ const ViewDetailPost = () => {
           ))}
         </div>
       </div>
-
+      </div>
+      
       {editingPost && (
         <EditPostModal
           isOpen={!!editingPost}

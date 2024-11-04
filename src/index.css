@@ -34,7 +34,7 @@ body {
 
 /* Universal page layout */
 .page-container {
-  max-width: 1000px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   background-color: #FCDE9C;
@@ -85,7 +85,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #13121233;
+  border-color: #BA5624;
 }
 button:focus,
 button:focus-visible {
@@ -94,11 +94,11 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
+    color: black;
     background-color: #ffffff;
   }
   a:hover {
-    color: #037269;
+    color: #BA5624;
   }
   button {
     background-color: #f9f9f9;

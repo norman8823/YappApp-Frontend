@@ -1,46 +1,10 @@
 .posts-feed {
   display: flex;
   flex-direction: column-reverse;
-  align-items: center;
+  align-items: left;
   gap: 30px;
   width: 100%;
-  padding: 0;
-}
-
-.bubble {
-  position: relative;
-  font-family: sans-serif;
-  font-size: 18px;
-  line-height: 24px;
-  width: 600px;
-  background: #fff;
-  border-radius: 20px;
-  padding: 24px;
-  text-align: left;
-  color: #000;
-  margin-bottom: 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-  display: flex;
-  flex-direction: column;
-  min-height: 200px;
-}
-
-.bubble:hover {
-  transform: translateY(-3px);
-  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.25);
-}
-
-.bubble-bottom-left:before {
-  content: "";
-  position: absolute;
-  left: 32px;
-  bottom: -19px;
-  border-width: 20px 20px 0;
-  border-style: solid;
-  border-color: #fff transparent transparent transparent;
-  z-index: 1;
+  padding: 25px;
 }
 
 .post-header {
@@ -144,6 +108,8 @@
   display: inline-block;
   background: white;
   padding: 10px 20px;
+  font-size: 1.5rem;
+  color: #333;
   border-radius: 20px;
   margin: 10px 0;
 }
@@ -154,6 +120,44 @@
   padding: 10px 20px;
   border-radius: 20px;
   margin: 10px 0;
+}
+
+.bubble {
+  position: relative;
+  font-family: sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+  width: fit-content;
+  min-width: 100px;
+  max-width: 700px;
+  background: #fff;
+  border-radius: 40px;
+  padding: 24px;
+  text-align: left;
+  margin-bottom: 10px;
+  color: #333;
+  cursor: pointer;
+  justify-content: left;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.bubble-bottom-left:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 24px solid #ffff;
+  border-right: 12px solid transparent;
+  border-top: 12px solid #ffff;
+  border-bottom: 20px solid transparent;
+  left: 32px;
+  bottom: -24px;
+}
+
+.bubble:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  transform: translateY(-3px);
 }
 
 /* Responsive design */
@@ -168,10 +172,7 @@
     padding: 30px 15px;
   }
   
-  .prompt-title {
-    font-size: 1.5rem;
-  }
-  
+ 
   .post-text {
     font-size: 1rem;
   }
