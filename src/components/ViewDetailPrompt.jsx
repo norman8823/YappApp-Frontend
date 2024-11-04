@@ -101,11 +101,11 @@ const ViewDetailPrompt = () => {
         className="owner-avatar"
       />
       <span>
-        {post.owner.username || "Unknown User"}
+        {(post.owner && post.owner.username) || "Unknown User"}
       </span>
     </div>
     
-    {user && post.owner._id === user._id && (
+    {user && post.owner && post.owner._id === user._id && (
       <div className="post-actions">
         <button
           onClick={(e) => {

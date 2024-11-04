@@ -22,11 +22,18 @@ export const getPostsByPrompt = async (promptId) => {
 
 export const getPostById = async (postId) => {
   try {
+    const token = localStorage.getItem("token"); 
+
+    if (!token) {
+      throw new Error("No authentication token available");
+    }
     const response = await fetch(`${BASE_URL}/posts/${postId}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
       },
     });
+    console.log(response)
 
     if (!response.ok) {
       throw new Error("Failed to fetch post");

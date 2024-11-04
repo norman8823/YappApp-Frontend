@@ -108,7 +108,7 @@ const handleSubmit = async (e) => {
 
       <div className="avatar-selector">
         <img
-          src="{avatarImages[avatar]}"
+          src={avatarImages[avatar]}
           alt="avatar"
           className="avatar-preview"
         />
