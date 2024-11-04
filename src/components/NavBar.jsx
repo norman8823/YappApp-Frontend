@@ -8,6 +8,7 @@ const NavBar = () => {
   const { signout, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const currentPath = location.pathname;
 
   const handleLogout = async () => {
     await signout();
@@ -18,53 +19,39 @@ const NavBar = () => {
     navigate(-1);
   };
 
-  const currentPath = location.pathname;
-
-  const renderLinks = () => {
-    if (user) {
-      return (
-        <div className="nav-links">
-          {currentPath !== "/profile" && (
-            <Link to="/profile" className="nav-button secondary-button">
-              Profile
-            </Link>
-          )}
-          {currentPath !== "/landing" && (
-            <Link to="/landing" className="nav-button secondary-button">
-              Home
-            </Link>
-          )}
-        </div>
-      );
-    } else {
-      return (
-        <div className="nav-links">
-          <Link to="/signup" className="nav-button primary-button">
-            Sign Up
-          </Link>
-          <Link to="/signin" className="nav-button primary-button">
-            Sign In
-          </Link>
-        </div>
-      );
-    }
-  };
-
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        {!currentPath.includes("/landing") && (
-          <button onClick={handleBack} className="back-button">
-            Back
-          </button>
-        )}
-        {renderLinks()}
-        <button onClick={handleLogout} className="logout-button">
-          <LogOut size={18} />
-          <span>Logout</span>
-        </button>
-      </div>
-    </nav>
+    <div className="nav-wrapper">
+      <nav className="navbar">
+        <div className="navbar-container">
+          <div className="left-side">
+            {!currentPath.includes("/landing") && (
+              <button onClick={handleBack} className="back-button">
+                Back
+              </button>
+            )}
+            {user && currentPath !== "/profile" && (
+              <Link to="/profile" className="nav-button profile-button">
+                Profile
+              </Link>
+            )}
+          </div>
+          
+          <div className="right-side">
+            {user && currentPath !== "/landing" && !currentPath.includes("/create") && (
+              <Link to="/landing" className="nav-button landing-button">
+                Home
+              </Link>
+            )}
+            {user && (
+              <button onClick={handleLogout} className="logout-button">
+                <LogOut size={18} />
+                <span>Logout</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </nav>
+    </div>
   );
 };
 

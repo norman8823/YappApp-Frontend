@@ -8,11 +8,36 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const currentUser = authService.getUser();
-    if (currentUser) {
-      setUser(currentUser);
-    }
-    setIsLoading(false);
+    const initializeAuth = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        console.log("Token in AuthProvider:", token); // Debug log
+
+        if (token) {
+          try {
+            // First try to decode the token directly
+            const decoded = JSON.parse(atob(token.split(".")[1]));
+            console.log("Decoded user from token:", decoded); // Debug log
+            
+            // Then get the user from authService as backup
+            const currentUser = authService.getUser();
+            console.log("Current user from authService:", currentUser); // Debug log
+            
+            // Use decoded token data if available, fall back to currentUser
+            setUser(decoded || currentUser);
+          } catch (error) {
+            console.error("Error processing token:", error);
+            localStorage.removeItem("token");
+          }
+        }
+      } catch (error) {
+        console.error("Auth initialization error:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeAuth();
   }, []);
 
   const signin = async (credentials) => {

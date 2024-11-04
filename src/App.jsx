@@ -13,7 +13,7 @@ import Landing from "./components/Landing";
 import CreatePost from "./components/CreatePost";
 import UpdatePost from "./components/UpdatePost";
 import ViewDetailPost from "./components/ViewDetailPost";
-import ViewDetailTopic from "./components/ViewDetailPrompt";
+import ViewDetailPrompt from "./components/ViewDetailPrompt";
 import UserProfile from "./components/UserProfile";
 import SignIn from "./components/SignIn";
 import Team from "./components/Team";
@@ -48,6 +48,8 @@ const App = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/FAQ" element={<FAQ />} />
 
             {/* Protected routes */}
             <Route
@@ -62,7 +64,7 @@ const App = () => {
               path="/prompt/:promptId"
               element={
                 <ProtectedRoute>
-                  <ViewDetailTopic />
+                  <ViewDetailPrompt />
                 </ProtectedRoute>
               }
             />
@@ -114,7 +116,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            <Route
+            {/* <Route
               path="/team"
               element={
                 <ProtectedRoute>
@@ -128,7 +130,7 @@ const App = () => {
                 <ProtectedRoute>
                   <FAQ />
                 </ProtectedRoute>
-              }
+              } */}
             />
           </Routes>
         </div>

@@ -132,107 +132,114 @@ const ViewDetailPost = () => {
     }
   };
 
+  console.log(post);
+
   return (
     <div className="post-detail-container">
-      <div className="post-header">
-        <h1 className="topic-title">{post.prompt?.prompt || "Topic"}</h1>
-      </div>
-
-      <div className="post-text">
-        <div className="post-owner">
-          <div className="user-info">
-            <img
-              src="/img/placeholderavatar.png"
-              alt="avatar"
-              className="owner-avatar"
-            />
-            <span>{post.owner.username}</span>
-          </div>
-          {user && post.owner._id === user._id && (
-            <div className="post-actions">
-              <button
-                onClick={() => setEditingPost(post)}
-                className="edit-button"
-                title="Edit post"
-              >
-                <Pencil size={16} />
-              </button>
-              <button
-                onClick={handleDelete}
-                className="delete-button"
-                title="Delete post"
-              >
-                <Trash2 size={16} />
-              </button>
-            </div>
-          )}
+      <div className="post-main-container">
+        <div className="post-header">
+          <h1 className="prompt-recap">{post.prompt?.prompt || "Topic"}</h1>
         </div>
-
-        <p className="post-text">{post.text}</p>
-
-        <div className="post-meta">
-          <div className="post-actions">
-            <div className="like-buttons">
-              <button
-                onClick={() => handleLike("upvote")}
-                className={`like-btn ${upvoteClass()}`}
-              >
-                👍 {post.voteCounts?.upvotes}
-              </button>
-              <button
-                onClick={() => handleLike("downvote")}
-                className={`dislike-btn ${downvoteClass()}`}
-              >
-                👎 {post.voteCounts?.downvotes}
-              </button>
-            </div>
-          </div>
-          <span>Posted {new Date(post.createdAt).toLocaleDateString()}</span>
-        </div>
-      </div>
-
-      <div className="comments-section">
-        <form onSubmit={handleAddComment} className="comment-form">
-          <input
-            type="text"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Add a comment"
-            className="comment-input"
-          />
-          <button type="submit" className="comment-btn">
-            Comment
-          </button>
-        </form>
-
-        <div className="comments-list">
-        {post.comments && post.comments.map((comment) => (
-          <div key={comment._id} className="comment">
-              <div className="comment-owner">
-                <div className="owner-info">
-                  <img
-                    src="/img/placeholderavatar.png"
-                    alt="avatar"
-                    className="owner-avatar"
-                  />
-                  <span>{comment?.owner?.username || 'Anonymous'}</span>
-                </div>
-                {user && comment?.owner?._id === user._id && (
-                  <div className="comment-actions">
-                    <button
-                      onClick={() => handleCommentDelete(comment._id)}
-                      className="deletecomment-button"
-                      title="Delete comment"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                )}
+        <div className="post-bubble post-bubble-tail">
+          <div className="post-text">
+            <div className="post-owner">
+              <div className="user-info">
+                <img
+                  src="/img/placeholderavatar.png"
+                  alt="avatar"
+                  className="owner-avatar"
+                />
+                <span>{post.owner.username}</span>
               </div>
-
-              <p className="comment-text">{comment.text}</p>
+              {user && post.owner._id === user._id && (
+                <div className="post-actions">
+                  <button
+                    onClick={() => setEditingPost(post)}
+                    className="edit-button"
+                    title="Edit post"
+                  >
+                    <Pencil size={16} />
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    className="delete-button"
+                    title="Delete post"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              )}
             </div>
-          ))}
+
+            <p className="post-text">{post.text}</p>
+          </div>
+        </div>
+
+        <div className="post-interaction-container">
+          <div className="post-meta">
+            <div className="post-actions">
+              <div className="like-buttons">
+                <button
+                  onClick={() => handleLike("upvote")}
+                  className={`like-btn ${upvoteClass()}`}
+                >
+                  👍 {post.voteCounts?.upvotes}
+                </button>
+                <button
+                  onClick={() => handleLike("downvote")}
+                  className={`dislike-btn ${downvoteClass()}`}
+                >
+                  👎 {post.voteCounts?.downvotes}
+                </button>
+              </div>
+            </div>
+            <span>Posted {new Date(post.createdAt).toLocaleDateString()}</span>
+          </div>
+        </div>
+        <div className="comments-section">
+          <form onSubmit={handleAddComment} className="comment-form">
+            <input
+              type="text"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Add a comment"
+              className="comment-input"
+            />
+            <button type="submit" className="comment-btn">
+              Comment
+            </button>
+          </form>
+
+          <div className="comments-list">
+            {post.comments.map((comment) => (
+              <div key={comment._id} className="commentbubble">
+                <div className="comment-owner">
+                  <div className="owner-info">
+                    <img
+                      src="/img/placeholderavatar.png"
+                      alt="avatar"
+                      className="owner-avatar"
+                    />
+                    <span>{comment.owner.username}</span>
+
+                  </div>
+                  {user && comment.owner._id === user._id && (
+                    <div className="comment-actions">
+                      <button
+                        onClick={() => handleCommentDelete(comment._id)}
+                        className="deletecomment-button"
+                        title="Delete comment"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <p className="comment-text">{comment.text}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

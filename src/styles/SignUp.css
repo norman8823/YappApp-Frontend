@@ -57,5 +57,6 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 20px;
+    width: 200px
+    /* margin-top: 20px; */
   }

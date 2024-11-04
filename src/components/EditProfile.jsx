@@ -4,6 +4,14 @@ import { useAuth } from "../contexts/AuthContext";
 import { updateUserProfile } from "../services/profileService";
 import "../styles/EditProfile.css";
 
+const avatarImages = [
+  "/img/avatar1.png",
+  "/img/avatar2.png",
+  "/img/avatar3.png",
+  "/img/avatar4.png",
+  "/img/avatar5.png",
+  "/img/avatar6.png",
+];
 const EditProfile = () => {
   const navigate = useNavigate();
   const { user, updateUser } = useAuth();
@@ -100,16 +108,33 @@ const handleSubmit = async (e) => {
 
       <div className="avatar-selector">
         <img
-          src="/img/placeholderavatar.png"
+          src={avatarImages[avatar]}
           alt="avatar"
           className="avatar-preview"
         />
         <div className="avatar-controls">
-          <button onClick={() => handleAvatarChange("prev")}>&lt;</button>
-          <button onClick={() => handleAvatarChange("next")}>&gt;</button>
-        </div>
-        <h3 className="text-center mt-2">{user?.username}</h3> 
-      </div>
+
+    <button 
+      onClick={(e) => {
+        e.preventDefault(); // Prevent form submission
+        handleAvatarChange("prev");
+      }}
+      className="avatar-button"
+    >
+      &lt;
+    </button>
+    <button 
+      onClick={(e) => {
+        e.preventDefault(); // Prevent form submission
+        handleAvatarChange("next");
+      }}
+      className="avatar-button"
+    >
+      &gt;
+    </button>
+  </div>
+  <h3 className="text-center mt-2">{user?.username}</h3> 
+</div>
 
       {error && <div className="error-message">{error}</div>}
 
@@ -198,11 +223,12 @@ const handleSubmit = async (e) => {
           <button
             type="button"
             onClick={() => navigate("/profile")}
-            className="cancel-button"
+            className="form-button cancel-button"
           >
             Cancel
           </button>
-          <button type="submit" className="create-profile-button">
+          <button type="submit" 
+          className="form-button create-profile-button">
             Save Changes
           </button>
         </div>

@@ -65,3 +65,27 @@
   .submit-button:hover {
     background-color: #ea580c;
   }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: #666;
+    z-index: 1000; /* Ensure it's above other content */
+  }
+  
+  .modal-close-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #BA5624; /* Match your theme color */
+    transform: scale(1.1);
+  }
+  

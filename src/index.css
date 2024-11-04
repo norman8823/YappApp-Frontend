@@ -24,13 +24,49 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  padding: 0;
+  /* display: flex;
+  place-items: center; */
   min-width: 320px;
   min-height: 100vh;
+
+  background-color: #FFF9E5;
+}
+
+/* Universal page layout */
+.page-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
   background-color: #FCDE9C;
-  font-family: sans-serif;
-  line-height: 1.6;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+/* Universal header styling */
+.header-section {
+  background-color: #ffe4c4;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
+  margin: -20px -20px 20px -20px;
+  padding: 40px 20px;
+}
+
+/* Header content wrapper */
+.header-content {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Main content section */
+.content-section {
+  width: 100%;
+  padding: 0 20px;                     
 }
 
 h1 {
@@ -50,12 +86,14 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #BA5624;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+
 
 .container {
   max-width: 800px;
@@ -65,23 +103,13 @@ button:focus-visible {
   background-color: #FCDE9C;
 }
 
-/* Universal header styling */
-.header {
-  width: 100%;
-  background-color: #FFA552;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-}
-
-
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
+    color: black;
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: #BA5624;
   }
   button {
     background-color: #f9f9f9;

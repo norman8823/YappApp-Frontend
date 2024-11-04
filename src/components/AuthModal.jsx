@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "../styles/AuthModal.css";
+import { X } from "lucide-react";
 import axios from "axios";
 
 const BASE_URL =
-  import.meta.env.VITE_EXPRESS_BACKEND_URL || "http://localhost:3000";
+  import.meta.env.VITE_BACK_END_SERVER_URL || "http://localhost:3000";
 
 const AuthModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
@@ -91,6 +92,10 @@ const AuthModal = ({ isOpen, onClose }) => {
   return (
     <div className="auth-modal-overlay">
       <div className="auth-modal">
+      <button onClick={onClose} className="modal-close-btn">
+          <X size={24} />
+        </button>
+
         <h2 className="auth-modal-title">Sign In</h2>
 
         {error && <div className="error-message">{error}</div>}

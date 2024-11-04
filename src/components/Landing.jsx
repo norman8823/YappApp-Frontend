@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Flame } from "lucide-react";
+import { Flame, MessageCircle } from "lucide-react";
 import axios from "axios";
 import "../styles/Landing.css";
 import * as postService from "../services/postService";
@@ -55,7 +55,7 @@ const Landing = () => {
     <div className="landing-container">
       <div className="header-section">
         <div className="prompt-header">
-          <h3 className="prompt-of-day">Today's Topic</h3>
+          {/* <h3 className="prompt-of-day">Today's Topic</h3> */}
           {currentPrompt && hasUserPostedToday() ? (
             <>
               <div className="current-prompt-bubble">
@@ -71,7 +71,7 @@ const Landing = () => {
           ) : (
             <>
               <div className="no-prompt-message">
-                Yap to see today's prompt!
+                Click to see today's prompt!
               </div>
               <button onClick={handleCreatePost} className="yap-button">
                 Yap
@@ -80,23 +80,31 @@ const Landing = () => {
           )}
         </div>
       </div>
-
+      <div className="content-section">
       <div className="prompts-section">
-        {prompts.map((prompt) => (
-          <Link
-            key={prompt._id}
-            to={`/prompt/${prompt._id}`}
-            className="prompt-bubble-container"
-            state={{ prompt: prompt }}
-            onClick={() => setCurrentPrompt(prompt)}
-          >
-            <div className="prompt-bubble">{prompt.prompt}</div>
-            {prompt.isHot && (
-              <Flame size={24} className="hot-indicator" color="#ef4444" />
-            )}
-          </Link>
-        ))}
-      </div>
+  {prompts.map((prompt) => (
+    <Link
+      key={prompt._id}
+      to={`/prompt/${prompt._id}`}
+      style={{ textDecoration: 'none' }}  
+      state={{ prompt: prompt }}
+      onClick={() => setCurrentPrompt(prompt)}
+    >
+      <p class="bubble thought">
+        {prompt.prompt}
+      </p>
+      {prompt.isHot && (
+        <Flame 
+          size={24} 
+          className="hot-indicator" 
+          color="#ef4444" 
+          style={{ marginLeft: '10px' }}
+        />
+      )}
+    </Link>
+  ))}
+</div>
+    </div>
     </div>
   );
 };
